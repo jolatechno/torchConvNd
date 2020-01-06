@@ -31,7 +31,7 @@ n-D convolution with arbitrary function
 """
 
 class Generalizer(nn.Modules):
-	def __init__(self, net, in_shape, out_shape):
+	def __init__(self, func, kernel, dilation=1, padding=0, initializer=False, args={,}):
 		self.net = net
 		self.parameters = net.parameters
 
