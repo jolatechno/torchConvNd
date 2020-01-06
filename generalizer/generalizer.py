@@ -25,6 +25,7 @@ class ConvNd(nn.Modules):
 		size = np.prod(preped.shape[len(preped.shape):])
 		result = self.linear(preped.reshape(-1, size), weight, bias)
 		return result.reshape(shape)
+	
 """
 n-D convolution with arbitrary function
 """
