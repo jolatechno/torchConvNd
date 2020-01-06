@@ -37,7 +37,7 @@ class GeneralConvNd(nn.Modules):
 	def __init__(self, func, kernel, dilation=1, padding=0, initializer=False, args={,}):
 		pass
 		
-	def forward(self, input, cost=0):
+	def forward(self, input):
 		pass
 
 """
@@ -51,5 +51,5 @@ class RecConvNd(nn.Modules):
 	def __init__(self, func, kernel, dilation=1, padding=0, initializer=False, args={,}):
 		pass
 		
-	def forward(self, input, mem, cost=0):
+	def forward(self, input, mem):
 		pass
