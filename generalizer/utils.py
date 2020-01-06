@@ -15,8 +15,8 @@ def extendedLen(x):
 		return len(x)
 	return -1
 
-def calcPadding(kernel, dilation): #assumming that stride and dilation are equal
-	dim = max(extendedLen(kernel), extendedLen(dilation))
+def calcPadding(kernel, dilation): #calculating the padding length such that the shape stays constant
+	dim = max(extendedLen(kernel), extendedLen(dilation)) #assumming that stride and dilation are equal
 	kernel, dilation = listify(kernel), listify(dilation)
 
 	if isinstance(kernel, list): #equvalent to isinstance(dilation, list)
@@ -41,7 +41,7 @@ def Stride(kernel, dilation=1):
 functions to preper a convolution
 """
 
-def convPrep(input, kernel, dilation=1, padding=None):
+def convPrep(input, kernel, dilation=1, padding=0):
 	padding = padding if padding is not None else calcPadding(kernel, dilation)
 
 	padded = pad(input, padding)
@@ -49,7 +49,7 @@ def convPrep(input, kernel, dilation=1, padding=None):
 
 	return strided
 
-def ConvPrep(input, kernel, dilation=1, padding=None):
+def ConvPrep(input, kernel, dilation=1, padding=0):
 	padding = padding if padding is not None else calcPadding(kernel, dilation)
 
 	Fpad = Pad(padding)
