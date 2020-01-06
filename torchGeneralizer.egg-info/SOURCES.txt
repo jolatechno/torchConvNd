@@ -1,0 +1,9 @@
+README.md
+setup.py
+generalizer/__init__.py
+generalizer/generalizer.py
+generalizer/utils.py
+torchGeneralizer.egg-info/PKG-INFO
+torchGeneralizer.egg-info/SOURCES.txt
+torchGeneralizer.egg-info/dependency_links.txt
+torchGeneralizer.egg-info/top_level.txt
