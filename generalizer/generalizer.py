@@ -1,28 +1,40 @@
-from utils import Stride
-
+from utils import *
 from torch import nn
+
+import numpy as np
+
+"""
+n-D convolution function
+"""
+
+def convNd(input, weight, kernel, dilation=1, padding=None, bias=None):
+	preped = convPrep(input, kernel, dilation, padding)
+	shape = preped.shape[:len(preped.shape)]
+	size = np.prod(preped.shape[len(preped.shape):])
+	result = nn.functional.linear(preped.reshape(-1, size), weight, bias)
+	return result.reshape(shape)
+
+class ConvNd(nn.Modules):
+	def __init__(self, kernel, dilation=1, padding=None, bias=False):
+		self.Fprep = ConvPrep(kernel, dilation, padding)
+		self.linear = nn.Linear(np.prod(kernel), np.prod(dilation), bias)
+
+	def forward(self, input):
+		preped = self.Fprep(input)
+		shape = preped.shape[:len(preped.shape)]
+		size = np.prod(preped.shape[len(preped.shape):])
+		result = self.linear(preped.reshape(-1, size), weight, bias)
+		return result.reshape(shape)
+"""
+n-D convolution with arbitrary function
+"""
 
 class Generalizer(nn.Modules):
 	def __init__(self, net, in_shape, out_shape):
 		self.net = net
 		self.parameters = net.parameters
 
-		self.out_shape, self.in_shape = out_shape, in_shape if isinstance(in_shape, list) else [in_shape, in_shape]
-		self.Istride, self.Pstride = Stride(self.in_shape[0], out_shape), Stride(self.in_shape[1], out_shape)
+		pass
 		
 	def forward(self, input, cost=0):
-		strided_input = Istride(input)
-		strided_params = Pstride(self.params)
-		expanded_cost = torch.Tensor([cost]*strided_input.shape[0]).unsqueeze(1)
-
-		inter = cat((strided_input, strided_params, expanded_cost), 1)
-		out = self.net(inter)
-
-		result = out.narrow(1, 0, self.in_shape[0]).flatten()
-		self.params = out.narrow(1, self.in_shape[0], self.in_shape[1]).flatten()
-
-		return result
-
-
-	def reset(self, length):
-		self.params = torch.zeros(length//in_shape[0]*in_shape[1])
+		pass
