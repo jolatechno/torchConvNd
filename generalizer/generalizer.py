@@ -30,12 +30,26 @@ class ConvNd(nn.Modules):
 n-D convolution with arbitrary function
 """
 
-class Generalizer(nn.Modules):
-	def __init__(self, func, kernel, dilation=1, padding=0, initializer=False, args={,}):
-		self.net = net
-		self.parameters = net.parameters
+def generalConvNd(inputs, func, kernel, dilation=1, padding=0, initializer=False, args={,}):
+	pass
 
+class GeneralConvNd(nn.Modules):
+	def __init__(self, func, kernel, dilation=1, padding=0, initializer=False, args={,}):
 		pass
 		
 	def forward(self, input, cost=0):
+		pass
+
+"""
+n-D convolution with a recursive function
+"""
+
+def recConvNd(inputs, mem, func, kernel, dilation=1, padding=0, initializer=False, args={,}):
+	pass
+
+class RecConvNd(nn.Modules):
+	def __init__(self, func, kernel, dilation=1, padding=0, initializer=False, args={,}):
+		pass
+		
+	def forward(self, input, mem, cost=0):
 		pass
