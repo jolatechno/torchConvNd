@@ -1,6 +1,5 @@
 # torchConvNd
 
-{#convNd}
 ### convNd
 ```python
 convNd(input, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
