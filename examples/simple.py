@@ -1,1 +1,1 @@
-import torchGeneralizer
+import convNd
