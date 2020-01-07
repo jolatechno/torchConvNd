@@ -80,7 +80,9 @@ pad(input, padding, mode='constant', value=0)
 Pad(padding, mode='constant', value=0)
 ```
 
-Return the function ```python lambda input: pad(input, padding, mode, value)```
+Return the function ```python
+lambda input: pad(input, padding, mode, value)
+```
 
 ### view
 ```python
