@@ -1,6 +1,6 @@
-# torchConvNd
+A library to compute N-D convolution in pytorch, using `Linear` filter, arbitrary `nn.Module` filter, and recurent filter.
 
-## Instalation
+# Instalation
 
 Use `pip3 install torchConvNd`
 

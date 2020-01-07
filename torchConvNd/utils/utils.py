@@ -52,14 +52,10 @@ slicing functions
 """
 
 def view(input, kernel, stride=1):
-    kernel, stride = listify(kernel, input.ndim), listify(stride, input.ndim)
-    shape = np.array([i//k for i, k in zip(input.shape, kernel)])
+    strided, kernel, stride = input, listify(kernel, input.ndim), listify(stride, input.ndim)
     
-    strided = input.view(*shape, *kernel)
-    for dim, s in enumerate(stride):
-        if s != 0:
-            idx = torch.LongTensor(range(strided.shape[dim])[::s])
-            strided = torch.index_select(strided, dim, idx)
+    for dim, (k, s) in enumerate(zip(kernel, stride)):
+    	strided = strided.unfold(dim, k, s)
 
     return strided
 
