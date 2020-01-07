@@ -80,9 +80,7 @@ pad(input, padding, mode='constant', value=0)
 Pad(padding, mode='constant', value=0)
 ```
 
-Return the function ```python
-lambda input: pad(input, padding, mode, value)
-```
+Return the function `lambda input: pad(input, padding, mode, value)`.
 
 ### view
 ```python
@@ -94,6 +92,8 @@ view(input, kernel, stride=1)
 View(kernel, stride=1)
 ```
 
+Return the function `lambda input: view(input, kernel, stride)`.
+
 ### convPrep
 ```python
 convPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
@@ -103,6 +103,8 @@ convPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_va
 ```python
 ConvPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
 ```
+
+Return an equivalent to function `lambda input: convPrep(input, kernel, stride, padding, padding_mode, padding_value)`.
 
 ### convPost(input, shape)
 ```python
@@ -114,7 +116,11 @@ convPost(input, shape)
 Flatten()
 ```
 
+A `torch.nn.Module` class that takes a tensor of shape `(N, i, j, k...)` and reshape it to `(N, i*j*k*...)`.
+
 ### Reshape
 ```python
 Reshape(shape)
 ```
+
+A `torch.nn.Module` class that takes a tensor of shape `(N, i)` and reshape it to `(N, shape[0], shape[1], ...)`.
