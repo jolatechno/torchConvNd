@@ -1,2 +1,2 @@
-from .convNdFunc import generalConvNd, GeneralConvNd, recConvNd, RecConvNd
+from .convNdFunc import convNdFunc, ConvNdFunc, convNdRec, ConvNdRec
 from .convNd import convNd, ConvNd

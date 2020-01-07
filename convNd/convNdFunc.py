@@ -7,7 +7,7 @@ import numpy as np
 n-D convolution with arbitrary function
 """
 
-def generalConvNd(input, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
+def convNdFunc(input, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
 	in_dim = input.ndim
 
 	pereped, shape = convPrep(input, kernel, stride, padding, padding_mode, padding_value)
@@ -17,17 +17,17 @@ def generalConvNd(input, func, kernel, stride=1, padding=0, padding_mode='consta
 		return result
 	return convPost(result, shape)
 
-class GeneralConvNd(nn.Module):
+class ConvNdFunc(nn.Module):
 	def __init__(self, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
-		super(GeneralConvNd, self).__init__()
+		super(ConvNdFunc, self).__init__()
 		self.parameters = func.parameters
-		self.forward = lambda input: generalConvNd(input, func, kernel, stride, padding, padding_mode, padding_value)
+		self.forward = lambda input: convNdFunc(input, func, kernel, stride, padding, padding_mode, padding_value)
 
 """
 n-D convolution with a recurent function
 """
 
-def recConvNd(input, mem, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
+def convNdRec(input, mem, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
 	in_dim = input.ndim
 	assert in_dim == mem.ndim, "memory and input dimenssion don't match up"
 
@@ -46,8 +46,8 @@ def recConvNd(input, mem, func, kernel, stride=1, padding=0, padding_mode='const
 
 	return result, mem_result
 
-class RecConvNd(nn.Module):
+class ConvNdRec(nn.Module):
 	def __init__(self, func, kernel,  stride=1, padding=0, padding_mode='constant', padding_value=0):
-		super(RecConvNd, self).__init__()
+		super(ConvNdRec, self).__init__()
 		self.parameters = func.parameters
-		self.forward = lambda input, mem: generalConvNd(input, func, kernel, stride, padding, padding_mode, padding_value)
+		self.forward = lambda input, mem: convNdRec(input, mem, func, kernel, stride, padding, padding_mode, padding_value)

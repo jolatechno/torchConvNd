@@ -1,5 +1,5 @@
 from .utils.utils import *
-from .convNdFunc import generalConvNd, GeneralConvNd
+from .convNdFunc import convNdFunc, ConvNdFunc
 
 from torch import nn
 import numpy as np
@@ -16,17 +16,17 @@ def convNd(input, weight, kernel, stride=1, dilation=1, padding=0, bias=None, pa
 		result = nn.functional.linear(flat)
 		return result.reshape(*dilation)
 
-	return generalConvNd(input, func, kernel, stride, dilation, padding, padding_mode, padding_value)
+	return convNdFunc(input, func, kernel, stride, padding, padding_mode, padding_value)
 
 class ConvNd(nn.Module):
 	def __init__(self, kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='constant', padding_value=0):
 		super(ConvNd, self).__init__()
-		
-		model = nn.Sequential([Flatten(),
-			nn.Linear(np.prod(kernel), np.prod(dilation), bias),
-			Reshape(kernel)])
 
-		conv = GeneralConvNd(model, kernel, stride, dilation, padding, padding_mode, padding_value)
+		model = nn.Sequential(Flatten(),
+			nn.Linear(np.prod(kernel), np.prod(dilation), bias),
+			Reshape(dilation))
+
+		conv = ConvNdFunc(model, kernel, stride, padding, padding_mode, padding_value)
 		self.forward = conv.forward
 		self.parameters = conv.parameters
 
