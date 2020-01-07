@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="torchGeneralizer",
+    name="torchConvNd",
     version="0.0.1",
     author="Joseph TOUZET",
     author_email="joseph.touzet@gmail.com",
