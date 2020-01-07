@@ -34,6 +34,8 @@ convNdFunc(input, func, kernel, stride=1, padding=0, padding_mode='constant', pa
 ConvNdFunc(func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
 ```
 
+Equivalent of `ConvNdFunc` as a `torch.nn.Module` class.
+
 ### convNdRec
 ```python
 convNdRec(input, mem, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0, *args)
@@ -43,6 +45,8 @@ convNdRec(input, mem, func, kernel, stride=1, padding=0, padding_mode='constant'
 ```python
 ConvNdRec(func, kernel,  stride=1, padding=0, padding_mode='constant', padding_value=0)
 ```
+
+Equivalent of `ConvNdRec` as a `torch.nn.Module` class.
 
 # torchConvNd.Utils
 
@@ -75,6 +79,8 @@ pad(input, padding, mode='constant', value=0)
 ```python
 Pad(padding, mode='constant', value=0)
 ```
+
+Return the function `lambda input: pad(input, padding, mode, value)`
 
 ### view
 ```python
