@@ -5,6 +5,13 @@
 convNd(input, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
 ```
 
+__Weight :__ `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims], kernel[0]*kernel[1]*...kernel[n_dims])`.
+__kernel__ : array-like or int, kernel size of the  convolution .
+__stride__ : array-like or int, stride length of the convolution.
+__padding__ : `None`, array-like or int, padding size. If `None` the padding will be calculated to conserve the shape of the inpute tensor (assuming dilation and stride are identical).
+__bias__ : `None` or `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims])`.
+__padding\_mode__ : see [torch.nn.functional.pad](https://pytorch.org/docs/stable/nn.functional.html#pad)
+
 ### ConvNd
 ```python
 ConvNd(kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='constant', padding_value=0)
