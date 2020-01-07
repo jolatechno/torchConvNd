@@ -24,7 +24,7 @@ class GeneralConvNd(nn.Module):
 		self.forward = lambda input: generalConvNd(input, func, kernel, stride, padding, padding_mode, padding_value)
 
 """
-n-D convolution with a recursive function
+n-D convolution with a recurent function
 """
 
 def recConvNd(input, mem, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
