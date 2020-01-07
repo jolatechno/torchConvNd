@@ -1,3 +1,2 @@
-from convNdFunc import *
-from convNd import *
-import utils as utils
+from .convNdFunc import generalConvNd, GeneralConvNd, recConvNd, RecConvNd
+from .convNd import convNd, ConvNd

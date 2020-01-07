@@ -114,14 +114,14 @@ custom layers
 """
 
 class Flatten(nn.Module):
-    def forward(self, input):
-        return input.flatten(1)
+	def forward(self, input):
+		return input.flatten(1)
 
 class Reshape(nn.Module):
 	def __init__(self, shape):
 		super(Reshape, self).__init__()
 		self.shape = shape
 
-    def forward(self, input):
-    	shape = listify(shape, input.ndim)
-        return input.reshape(-1, *shape)
+	def forward(self, input):
+		shape = listify(shape, input.ndim)
+		return input.reshape(-1, *shape)

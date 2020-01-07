@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: torchConvNd
+Version: 0.0.1
+Summary: a library to create convolution from any torch network
+Home-page: https://github.com/jolatechno/torchConvNd
+Author: Joseph TOUZET
+Author-email: joseph.touzet@gmail.com
+License: UNKNOWN
+Description: # torchConvNd
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU V3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown

@@ -1,5 +1,5 @@
-from utils import *
-from convNdFunc import *
+from .utils.utils import *
+from .convNdFunc import generalConvNd, GeneralConvNd
 
 from torch import nn
 import numpy as np
