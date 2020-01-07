@@ -15,12 +15,14 @@ __padding__ : `None`, array-like or int, padding size. If `None` the padding wil
 
 __bias__ : `None` or `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims])`.
 
-__padding\_mode__ : see [torch.nn.functional.pad](https://pytorch.org/docs/stable/nn.functional.html#pad)
+__padding\_mode__ : see [torch.nn.functional.pad](https://pytorch.org/docs/stable/nn.functional.html#pad).
 
 ### ConvNd
 ```python
 ConvNd(kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='constant', padding_value=0)
 ```
+
+Equivalent of `convNd` as a `torch.nn.Module` class.
 
 ### convNdFunc
 ```python
