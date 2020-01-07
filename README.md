@@ -1,5 +1,11 @@
 # torchConvNd
 
+## Instalation
+
+Use `pip3 install torchConvNd`.
+
+# Documentation
+
 ### convNd
 ```python
 convNd(input, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
@@ -58,7 +64,7 @@ ConvNdRec(func, kernel,  stride=1, padding=0, padding_mode='constant', padding_v
 
 Equivalent of `ConvNdRec` as a `torch.nn.Module` class.
 
-# torchConvNd.Utils
+## torchConvNd.Utils
 
 ### listify
 ```python

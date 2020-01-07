@@ -20,7 +20,7 @@ setup(
     install_requires=parse_requirements("requirements.txt"),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU V3",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
