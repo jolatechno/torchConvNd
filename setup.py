@@ -3,6 +3,10 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+def parse_requirements(filename):
+    lineiter = (line.strip() for line in open(filename))
+    return [line for line in lineiter if line and not line.startswith("#")]
+
 setup(
     name="torchConvNd",
     version="0.0.1",
@@ -13,6 +17,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/jolatechno/torchConvNd",
     packages=find_packages(),
+    install_requires=parse_requirements("requirements.txt"),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU V3",
