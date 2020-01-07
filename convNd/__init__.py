@@ -1,3 +1,3 @@
 from convNdFunc import *
 from convNd import *
-import utils
+import utils as utils
