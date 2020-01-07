@@ -1,6 +1,6 @@
 # torchConvNd
 
-### convNd
+### convNd {#convNd}
 ```python
 convNd(input, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
 ```
@@ -22,7 +22,7 @@ __padding\_mode__ : see [torch.nn.functional.pad](https://pytorch.org/docs/stabl
 ConvNd(kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='constant', padding_value=0)
 ```
 
-Equivalent of `convNd` as a `torch.nn.Module` class.
+Equivalent of [`convNd`](#convNd) as a `torch.nn.Module` class.
 
 ### convNdFunc
 ```python
