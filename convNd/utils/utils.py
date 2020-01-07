@@ -53,8 +53,7 @@ slicing functions
 
 def view(input, kernel, stride=1):
     kernel, stride = listify(kernel, input.ndim), listify(stride, input.ndim)
-    shape = np.array([i - k + 1 if k%2 == 1 else i - k
-    	for i, k in zip(input.shape, kernel)])
+    shape = np.array([i//k for i, k in zip(input.shape, kernel)])
     
     strided = input.view(*shape, *kernel)
     for dim, s in enumerate(stride):
@@ -79,7 +78,7 @@ def convPrep(input, kernel, stride=1, padding=0, padding_mode='constant', paddin
 	strided = view(input, kernel, stride)
 
 	shape = strided.shape[:in_dim]
-	return strided.flatten(0, in_dim), shape
+	return strided.flatten(0, in_dim - 1), shape
 
 def ConvPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
 	padding = padding if padding is not None else calcPadding(kernel, stride)
@@ -99,9 +98,9 @@ def convPost(input, shape):
 	input = input.reshape(*shape, *input.shape[1:])
 
 	dim = input.ndim//2
-	command = letter[:2*dim] + " -> "
+	command = letters[:2*dim] + " -> "
 	for i in range(dim):
-	    command = command + letter[i] + letter[i + dim]
+	    command = command + letters[i] + letters[i + dim]
 
 	out = torch.einsum(command, input)
 	for i in range(dim):
@@ -123,5 +122,5 @@ class Reshape(nn.Module):
 		self.shape = shape
 
 	def forward(self, input):
-		shape = listify(shape, input.ndim)
+		shape = listify(self.shape, input.ndim)
 		return input.reshape(-1, *shape)
