@@ -1,12 +1,12 @@
 README.md
 setup.py
-convNd/__init__.py
-convNd/convNd.py
-convNd/convNdFunc.py
-convNd/utils/__init__.py
-convNd/utils/utils.py
+torchConvNd/__init__.py
+torchConvNd/convNd.py
+torchConvNd/convNdFunc.py
 torchConvNd.egg-info/PKG-INFO
 torchConvNd.egg-info/SOURCES.txt
 torchConvNd.egg-info/dependency_links.txt
 torchConvNd.egg-info/requires.txt
 torchConvNd.egg-info/top_level.txt
+torchConvNd/utils/__init__.py
+torchConvNd/utils/utils.py

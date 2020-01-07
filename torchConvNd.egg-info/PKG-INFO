@@ -7,6 +7,38 @@ Author: Joseph TOUZET
 Author-email: joseph.touzet@gmail.com
 License: UNKNOWN
 Description: # torchConvNd
+        
+        ### convNd
+        ```python
+        convNd(input, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
+        ```
+        
+        ### ConvNd
+        ```python
+        ConvNd(kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='constant', padding_value=0)
+        ```
+        
+        ### convNdFunc
+        ```python
+        convNdFunc(input, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0, *args)
+        ```
+        
+        ### ConvNdFunc
+        ```python
+        ConvNdFunc(func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
+        ```
+        
+        ### convNdRec
+        ```python
+        convNdRec(input, mem, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0, *args)
+        ```
+        
+        ### ConvNdRec
+        ```python
+        ConvNdRec(func, kernel,  stride=1, padding=0, padding_mode='constant', padding_value=0)
+        ```
+        
+        ## util
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: GNU V3
