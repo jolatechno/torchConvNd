@@ -30,7 +30,7 @@ convNdRec(input, mem, func, kernel, stride=1, padding=0, padding_mode='constant'
 ConvNdRec(func, kernel,  stride=1, padding=0, padding_mode='constant', padding_value=0)
 ```
 
-## Utils
+# torchConvNd.Utils
 
 ### listify
 ```python
