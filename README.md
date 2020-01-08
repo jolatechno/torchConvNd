@@ -1,4 +1,4 @@
-A library to compute N-D convolution in pytorch, using `Linear` filter, arbitrary `nn.Module` filter, and recurent filter.
+A library to compute N-D convolution in pytorch, using `Linear` filter, arbitrary `nn.Module` filter, and to automaticly calculate convolution parameters on the fly to obtain a desired output shape.
 
 # Instalation
 
