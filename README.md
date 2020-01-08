@@ -46,7 +46,7 @@ __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 ConvNdFunc(func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
 ```
 
-Equivalent of `ConvNdFunc` as a `torch.nn.Module` class.
+Equivalent of [`ConvNdFunc`](#ConvNdFunc) as a `torch.nn.Module` class.
 
 ### convNdRec
 ```python
@@ -62,14 +62,14 @@ __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 ConvNdRec(func, kernel,  stride=1, padding=0, padding_mode='constant', padding_value=0)
 ```
 
-Equivalent of `ConvNdRec` as a `torch.nn.Module` class.
+Equivalent of [`ConvNdRec`](#ConvNdRec) as a `torch.nn.Module` class.
 
 ### convNdAuto
 ```python
 convNdAuto(input, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args)
 ```
 
-Equivalent of `convNdFunc` wich calculate `stride` and `padding` such that the output shaphe matches `output_shape`.
+Equivalent of [`convNdFunc`](#convNdFunc) wich calculate `stride` and `padding` such that the output shaphe matches `output_shape`.
 
 __output\_shape__ : array-like or int, the desired output of the convolution.
 
@@ -78,7 +78,21 @@ __output\_shape__ : array-like or int, the desired output of the convolution.
 ConvNdAuto(func, kernel, dilation=1, padding_mode='constant', padding_value=0)
 ```
 
-Equivalent of `convNdAuto` as a `torch.nn.Module` class.
+Equivalent of [`convNdAuto`](#convNdAuto) as a `torch.nn.Module` class.
+
+### convNdRecAuto
+```python
+convNdRecAuto(input, mem, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args)
+```
+
+Recursive equivalent of [`convNdAuto`](#convNdAuto).
+
+### convNdRecAuto
+```python
+convNdRecAuto(input, mem, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args)
+```
+
+Equivalent of [`convNdRecAuto`](#convNdRecAuto) as a `torch.nn.Module` class.
 
 # torchConvNd.Utils
 
