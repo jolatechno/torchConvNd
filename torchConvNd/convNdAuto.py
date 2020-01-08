@@ -45,6 +45,6 @@ def convNdRecAuto(input, mem, output_shape, func, kernel, dilation=1, padding_mo
 
 class ConvNdRecAuto(nn.Module):
 	def __init__(self, func, kernel, dilation=1, padding_mode='constant', padding_value=0):
-		super(ConvNdRec, self).__init__()
+		super(ConvNdRecAuto, self).__init__()
 		self.parameters = func.parameters
 		self.forward = lambda input, mem, output_shape, *args: convNdRecAuto(input, mem, output_shape, func, kernel, dilation, padding_mode, padding_value, *args)
