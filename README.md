@@ -65,7 +65,6 @@ ConvNdRec(func, kernel,  stride=1, padding=0, padding_mode='constant', padding_v
 Equivalent of `ConvNdRec` as a `torch.nn.Module` class.
 
 ### convNdAuto
-
 ```python
 convNdAuto(input, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args)
 ```
@@ -75,7 +74,6 @@ Equivalent of `convNdFunc` wich calculate `stride` and `padding` such that the o
 __output\_shape__ : array-like or int, the desired output of the convolution.
 
 ### ConvNdAuto
-
 ```python
 ConvNdAuto(func, kernel, dilation=1, padding_mode='constant', padding_value=0)
 ```
@@ -110,10 +108,16 @@ Output the length of `x` if it is iterable, else `-1`.
 calcPadding(kernel, stride)
 ```
 ### calcShape
+```python
+calcShape(input_shape, kernel, stride=1, dilation=1, padding=0):
+```
 
 Calculate the output shape of a convolution, see [torch.nn.Conv1d](https://pytorch.org/docs/stable/nn.html#torch.nn.Conv1d).
 
-### calcStridePad
+### autoStridePad
+```python
+autoStridePad(input_shape, output_shape, kernel, dilation=1)
+```
 
 Calculate stride and padding size such that the output shape of a convolution matches `output_shape`.
 
