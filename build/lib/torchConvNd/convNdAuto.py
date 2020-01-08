@@ -30,7 +30,8 @@ n-D convolution with a recurent function and automatic output shape
 
 def convNdRecAuto(input, mem, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args):
 	in_dim = input.ndim
-	assert in_dim == mem.ndim, "memory and input dimenssion don't match up"
+	if in_dim != mem.ndim:
+		raise ValueError("memory and input dimenssion don't match up")
 
 	padding_mode, padding_value = listify(padding_mode, 2), listify(padding_value, 2)
 	output_shape, kernel, dilation = sequencify(output_shape, 2, in_dim), sequencify(kernel, 2, in_dim), sequencify(dilation, 2, in_dim)

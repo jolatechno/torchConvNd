@@ -29,7 +29,7 @@ n-D convolution with a recurent function
 
 def convNdRec(input, mem, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0, *args):
 	in_dim = input.ndim
-	if in_dim == mem.ndim:
+	if in_dim != mem.ndim:
 		raise ValueError("memory and input dimenssion don't match up")
 
 	padding_mode, padding_value = listify(padding_mode, 2), listify(padding_value, 2)
