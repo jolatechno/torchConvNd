@@ -4,6 +4,8 @@ import torch.nn.functional as F
 
 import numpy as np
 
+from collections.abc import Iterable
+
 """
 helper functions
 """
@@ -12,7 +14,7 @@ def listify(x, dims=1):
 	if dims < 0:
 		return x
 
-	if isinstance(x, list):
+	if isinstance(x, Iterable):
 		if len(x) != dims:
 			ValueError("Shape don't match up")
 
@@ -23,20 +25,20 @@ def listify(x, dims=1):
 def sequencify(x, nlist=1, dims=1):
 	if nlist < 0:
 		return x
-	if isinstance(x, list):
-		if isinstance(x[0], list):
+	if isinstance(x, Iterable):
+		if isinstance(x[0], Iterable):
 			return x
 		return [x for i in range(nlist)]
 	return [[x for i in range(dims)] for i in range(nlist)]
 
 def extendedLen(x):
-	if isinstance(x, list):
+	if isinstance(x, Iterable):
 		return len(x)
 	return -1
 
 def dimCheck(*args):
     dim = max([extendedLen(x)for x in args])
-    return *[listify(x, dim) for x in args], dim == -1
+    return (*[listify(x, dim) for x in args], dim == -1)
 
 """
 functions for convNdAuto
@@ -45,7 +47,7 @@ functions for convNdAuto
 def calcShape(input_shape, kernel, stride=1, dilation=1, padding=0):
 	input_shape, kernel, stride, dilation, padding, single = dimCheck(input_shape, kernel, stride, dilation, padding)
 	if single:
-		return (input_shape + 2*padding - dilation*(kernel - 1) - 1)//stride + 1
+		return ((input_shape + 2*padding - dilation*(kernel - 1) - 1)//stride + 1)*dilation
 	
 	return [calcShape(i, k, s, d, p) for i, k, s, d, p in zip(input_shape, kernel, stride, dilation, padding)]
 
@@ -88,7 +90,7 @@ padding functions
 
 def pad(input, padding, mode='constant', value=0):
 	padding = listify(padding, input.ndim)
-	padding = np.repeat(padding[::-1], 2)
+	padding = np.repeat(padding[::-1], 2)	
 	return F.pad(input=input, pad=tuple(padding), mode=mode, value=value)
 
 def Pad(padding, mode='constant', value=0):

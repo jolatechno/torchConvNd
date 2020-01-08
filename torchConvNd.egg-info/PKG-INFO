@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: torchConvNd
-Version: 0.0.2
+Version: 0.0.3
 Summary: a library to create convolution from any torch network
 Home-page: https://github.com/jolatechno/torchConvNd
 Author: Joseph TOUZET
@@ -54,7 +54,7 @@ Description: A library to compute N-D convolution in pytorch, using `Linear` fil
         ConvNdFunc(func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
         ```
         
-        Equivalent of `ConvNdFunc` as a `torch.nn.Module` class.
+        Equivalent of [`ConvNdFunc`](#ConvNdFunc) as a `torch.nn.Module` class.
         
         ### convNdRec
         ```python
@@ -70,7 +70,37 @@ Description: A library to compute N-D convolution in pytorch, using `Linear` fil
         ConvNdRec(func, kernel,  stride=1, padding=0, padding_mode='constant', padding_value=0)
         ```
         
-        Equivalent of `ConvNdRec` as a `torch.nn.Module` class.
+        Equivalent of [`ConvNdRec`](#ConvNdRec) as a `torch.nn.Module` class.
+        
+        ### convNdAuto
+        ```python
+        convNdAuto(input, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args)
+        ```
+        
+        Equivalent of [`convNdFunc`](#convNdFunc) wich calculate `stride` and `padding` such that the output shaphe matches `output_shape`.
+        
+        __output\_shape__ : array-like or int, the desired output of the convolution.
+        
+        ### ConvNdAuto
+        ```python
+        ConvNdAuto(func, kernel, dilation=1, padding_mode='constant', padding_value=0)
+        ```
+        
+        Equivalent of [`convNdAuto`](#convNdAuto) as a `torch.nn.Module` class.
+        
+        ### convNdRecAuto
+        ```python
+        convNdRecAuto(input, mem, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args)
+        ```
+        
+        Recursive equivalent of [`convNdAuto`](#convNdAuto).
+        
+        ### ConvNdRecAuto
+        ```python
+        ConvNdRecAuto(output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0)
+        ```
+        
+        Equivalent of [`convNdRecAuto`](#convNdRecAuto) as a `torch.nn.Module` class.
         
         # torchConvNd.Utils
         
@@ -95,12 +125,30 @@ Description: A library to compute N-D convolution in pytorch, using `Linear` fil
         
         Output the length of `x` if it is iterable, else `-1`.
         
+        ### dimCheck
+        ```python
+        dimCheck(*args)
+        ```
+        
+        Check if all input are of same length or non-iterable, then [`listify`](#listify) them to their common length.
+        
         ### calcPadding
         ```python
         calcPadding(kernel, stride)
         ```
+        ### calcShape
+        ```python
+        calcShape(input_shape, kernel, stride=1, dilation=1, padding=0):
+        ```
         
-        Calculate padding size such that the input shape is the same as the output shape (assuming that the dilation is equal to stride). See [torch.nn.Conv1d](https://pytorch.org/docs/stable/nn.html#torch.nn.Conv1d).
+        Calculate the output shape of a convolution, see [torch.nn.Conv1d](https://pytorch.org/docs/stable/nn.html#torch.nn.Conv1d).
+        
+        ### autoStridePad
+        ```python
+        autoStridePad(input_shape, output_shape, kernel, dilation=1)
+        ```
+        
+        Calculate stride and padding size such that the output shape of a convolution matches `output_shape`.
         
         ### pad
         ```python
@@ -170,6 +218,7 @@ Description: A library to compute N-D convolution in pytorch, using `Linear` fil
         ```
         
         A `torch.nn.Module` class that takes a tensor of shape `(N, i)` and reshape it to `(N, shape[0], shape[1], ...)`.
+        
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
