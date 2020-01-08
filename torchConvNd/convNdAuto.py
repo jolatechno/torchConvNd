@@ -8,7 +8,7 @@ n-D convolutional layer with automatic output shape
 """
 
 def convNdAuto(input, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args):
-	stride, padding = 0, 0
+	stride, padding = autoStridePad(input.shape, output_shape, kernel, dilation)
 	return convNdFunc(input, func, kernel, stride, padding, padding_mode, padding_value, *args)
 
 class ConvNdAuto(nn.Module):
@@ -28,8 +28,8 @@ def convNdRecAuto(input, mem, output_shape, func, kernel, dilation=1, padding_mo
 	padding_mode, padding_value = listify(padding_mode, 2), listify(padding_value, 2)
 	output_shape, kernel, dilation = sequencify(output_shape, 2, in_dim), sequencify(kernel, 2, in_dim), sequencify(dilation, 2, in_dim)
 	
-	stride, padding = 0, 0
-	mem_stride, mem_padding = 0, 0
+	stride, padding = autoStridePad(input.shape, output_shape[0], kernel[0], dilation[0])
+	mem_stride, mem_padding = autoStridePad(mem.shape, output_shape[1], kernel[1], dilation[1])
 	
 	pereped, shape = convPrep(input, kernel[0], stride, padding, padding_mode[0], padding_value[0])
 	mem_pereped, mem_shape = convPrep(input, kernel[1], mem_stride, mem_padding, padding_mode[1], padding_value[1])
