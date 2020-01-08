@@ -34,7 +34,7 @@ functions for convNdAuto
 def calcShape(input_shape, kernel, stride=1, dilation=1, padding=0):
 	dim = max(extendedLen(input_shape), extendedLen(kernel), extendedLen(stride), extendedLen(dilation), extendedLen(padding))
 	if dim == -1:
-		return 0
+		return (input_shape + 2*padding - dilation*(kernel - 1) - 1)//stride + 1
 	
 	input_shape = listify(input_shape, dim)
 	kernel = listify(kernel, dim)
@@ -43,6 +43,21 @@ def calcShape(input_shape, kernel, stride=1, dilation=1, padding=0):
 	padding = listify(padding, dim)
 	
 	return [calcShape(i, k, s, d, p) for i, k, s, d, p in zip(input_shape, kernel, stride, dilation, padding)]
+
+def autoStridePad(input_shape, output_shape, kernel, dilation=1):
+	dim = max(extendedLen(input_shape), extendedLen(output_shape), extendedLen(kernel), extendedLen(dilation))
+	if dim == -1:
+		return 0
+	
+	input_shape = listify(input_shape, dim)
+	output_shape = listify(output_shape, dim)
+	kernel = listify(kernel, dim)
+	dilation = listify(dilation, dim)
+	
+	return [autoStridePad(i, o, k, d) for i, o, k, d in zip(input_shape, output_shape, kernel, dilation)]
+
+def AutoStridePad(kernel, dilation=1):
+	return lambda input_shape, output_shape: autoStridePad(input_shape, output_shape, kernel, dilation)
 
 """
 padding functions
