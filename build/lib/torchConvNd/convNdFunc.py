@@ -39,10 +39,10 @@ def convNdRec(input, mem, func, kernel, stride=1, padding=0, padding_mode='const
 	mem_pereped, mem_shape = convPrep(input, kernel[1], stride[1], padding[1], padding_mode[1], padding_value[1])
 	result, mem_result = func(pereped, mem_pereped, *args)
 
-	if result.ndim == in_dim:
+	if result.ndim != in_dim:
 		result = convPost(result, shape)
 
-	if mem_result.ndim == in_dim:
+	if mem_result.ndim != in_dim:
 		mem_result = convPost(result_mem, mem_shape)
 
 	return result, mem_result

@@ -14,7 +14,7 @@ def listify(x, dims=1):
 	if dims < 0:
 		return x
 
-	if isinstance(x, Iterable):
+	if isinstance(x, Iterable) and not isinstance(x, str):
 		if len(x) != dims:
 			ValueError("Shape don't match up")
 
@@ -25,8 +25,16 @@ def listify(x, dims=1):
 def sequencify(x, nlist=1, dims=1):
 	if nlist < 0:
 		return x
-	if isinstance(x, Iterable):
-		if isinstance(x[0], Iterable):
+	if isinstance(x, Iterable) and not isinstance(x, str):
+
+		if len(x) != nlist:
+			ValueError("Wrong sequence length")
+
+		if isinstance(x[0], Iterable) and not isinstance(x[0], str):
+
+			if len(x[0]) != dims:
+				ValueError("Shape don't match up")
+
 			return x
 		return [x for i in range(nlist)]
 	return [[x for i in range(dims)] for i in range(nlist)]
@@ -76,10 +84,10 @@ def autoStridePad(input_shape, output_shape, kernel, dilation=1):
 
 			padding += 1
 
-		stride, padding = 1, 1
 		return stride, padding
 	
-	return [autoStridePad(i, o, k, d) for i, o, k, d in zip(input_shape, output_shape, kernel, dilation)]
+	params = [autoStridePad(i, o, k, d) for i, o, k, d in zip(input_shape, output_shape, kernel, dilation)]
+	return [p[0] for p in params], [p[1] for p in params]
 
 def AutoStridePad(kernel, dilation=1):
 	return lambda input_shape, output_shape: autoStridePad(input_shape, output_shape, kernel, dilation)
@@ -146,8 +154,8 @@ def convPost(input, shape):
 	    command = command + letters[i] + letters[i + dim]
 
 	out = torch.einsum(command, input)
-	for i in range(dim):
-	    out = out.flatten(i, i + 1)
+	for i in reversed(range(dim)):
+	    out = out.flatten(2*i, 2*i + 1)
 
 	return out
 
