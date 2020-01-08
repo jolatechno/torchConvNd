@@ -12,5 +12,6 @@ def convNdAuto(input, func, kernel, dilation=1, padding_mode='constant', padding
 
 class ConvNdAuto(nn.Module):
 	def __init__(self, func, kernel, dilation=1, padding_mode='constant', padding_value=0):
+		super(ConvNdAuto, self).__init__()
 		self.parameters = func.parameters
 		self.forward = lambda input, output_shape, *args: (input, func, kernel, dilation, padding_mode, padding_value, *args)
