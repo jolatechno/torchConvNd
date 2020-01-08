@@ -87,9 +87,9 @@ convNdRecAuto(input, mem, output_shape, func, kernel, dilation=1, padding_mode='
 
 Recursive equivalent of [`convNdAuto`](#convNdAuto).
 
-### convNdRecAuto
+### ConvNdRecAuto
 ```python
-convNdRecAuto(input, mem, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args)
+ConvNdRecAuto(output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0)
 ```
 
 Equivalent of [`convNdRecAuto`](#convNdRecAuto) as a `torch.nn.Module` class.
