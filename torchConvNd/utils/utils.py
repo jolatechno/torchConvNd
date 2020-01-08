@@ -27,13 +27,22 @@ def extendedLen(x):
 		return len(x)
 	return -1
 
-def calcPadding(kernel, stride): #calculating the padding length such that the shape stays constant
-	dim = max(extendedLen(kernel), extendedLen(stride)) #assumming that stride and dilation are equal
-	kernel, stride = listify(kernel), listify(stride)
+"""
+functions for convNdAuto
+"""
 
-	if isinstance(kernel, list): #equvalent to isinstance(stride, list)
-		return [k//2 - s//2 for k, s in zip(kernel, stride)]
-	return kernel//2 - s//2
+def calcShape(input_shape, kernel, stride=1, dilation=1, padding=0):
+	dim = max(extendedLen(input_shape), extendedLen(kernel), extendedLen(stride), extendedLen(dilation), extendedLen(padding))
+	if dim == -1:
+		return 0
+	
+	input_shape = listify(input_shape, dim)
+	kernel = listify(kernel, dim)
+	stride = listify(stride, dim)
+	dilation = listify(dilation, dim)
+	padding = listify(padding, dim)
+	
+	return [calcShape(i, k, s, d, p) for i, k, s, d, p in zip(input_shape, kernel, stride, dilation, padding)]
 
 """
 padding functions
@@ -68,8 +77,6 @@ functions to prepare a convolution
 
 def convPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
 	in_dim = input.ndim
-	padding = padding if padding is not None else calcPadding(kernel, stride)
-
 	padded = pad(input, padding, padding_mode, padding_value)
 	strided = view(input, kernel, stride)
 
@@ -77,8 +84,6 @@ def convPrep(input, kernel, stride=1, padding=0, padding_mode='constant', paddin
 	return strided.flatten(0, in_dim - 1), shape
 
 def ConvPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
-	padding = padding if padding is not None else calcPadding(kernel, stride)
-
 	Fpad = Pad(padding, padding_mode, padding_value)
 	Fstride = View(kernel, stride)
 	
