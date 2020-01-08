@@ -1,14 +1,14 @@
 Metadata-Version: 2.1
 Name: torchConvNd
-Version: 0.0.1
+Version: 0.0.2
 Summary: a library to create convolution from any torch network
 Home-page: https://github.com/jolatechno/torchConvNd
 Author: Joseph TOUZET
 Author-email: joseph.touzet@gmail.com
 License: UNKNOWN
-Description: # torchConvNd
+Description: A library to compute N-D convolution in pytorch, using `Linear` filter, arbitrary `nn.Module` filter, and recurent filter.
         
-        ## Instalation
+        # Instalation
         
         Use `pip3 install torchConvNd`
         

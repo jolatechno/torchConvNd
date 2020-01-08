@@ -117,6 +117,13 @@ extendedLen(x)
 
 Output the length of `x` if it is iterable, else `-1`.
 
+### dimCheck
+```python
+dimCheck(*args)
+```
+
+Check if all input are of same length or non-iterable, then [`listify`](#listify) them to their common length.
+
 ### calcPadding
 ```python
 calcPadding(kernel, stride)

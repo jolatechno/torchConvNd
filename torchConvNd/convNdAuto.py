@@ -9,13 +9,20 @@ n-D convolutional layer with automatic output shape
 
 def convNdAuto(input, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args):
 	stride, padding = autoStridePad(input.shape, output_shape, kernel, dilation)
-	return convNdFunc(input, func, kernel, stride, padding, padding_mode, padding_value, *args)
+	output_shape = listify(output_shape, input.ndim)
+
+	out = convNdFunc(input, func, kernel, stride, padding, padding_mode, padding_value, *args)
+
+	for i in range(input.ndim):
+		out = out.narrow(i, 0, output_shape[i])
+
+	return out
 
 class ConvNdAuto(nn.Module):
 	def __init__(self, func, kernel, dilation=1, padding_mode='constant', padding_value=0):
 		super(ConvNdAuto, self).__init__()
 		self.parameters = func.parameters
-		self.forward = lambda input, output_shape, *args: (input, output_shape, func, kernel, dilation, padding_mode, padding_value, *args)
+		self.forward = lambda input, output_shape, *args: convNdAuto(input, output_shape, func, kernel, dilation, padding_mode, padding_value, *args)
 
 """
 n-D convolution with a recurent function and automatic output shape
@@ -40,6 +47,10 @@ def convNdRecAuto(input, mem, output_shape, func, kernel, dilation=1, padding_mo
 
 	if mem_result.ndim == in_dim:
 		mem_result = convPost(result_mem, mem_shape)
+
+	for i in range(input.ndim):
+		result = result.narrow(i, 0, output_shape[0][i])
+		mem_result = mem_result.narrow(i, 0, output_shape[1][i])
 
 	return result, mem_result
 

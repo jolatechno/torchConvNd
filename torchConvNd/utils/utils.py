@@ -9,8 +9,15 @@ helper functions
 """
 
 def listify(x, dims=1):
-	if isinstance(x, list) or dims < 0:
+	if dims < 0:
 		return x
+
+	if isinstance(x, list):
+		if len(x) != dims:
+			ValueError("Shape don't match up")
+
+		return x
+
 	return [x for i in range(dims)]
 
 def sequencify(x, nlist=1, dims=1):
@@ -27,32 +34,48 @@ def extendedLen(x):
 		return len(x)
 	return -1
 
+def dimCheck(*args):
+    dim = max([extendedLen(x)for x in args])
+    return *[listify(x, dim) for x in args], dim == -1
+
 """
 functions for convNdAuto
 """
 
 def calcShape(input_shape, kernel, stride=1, dilation=1, padding=0):
-	dim = max(extendedLen(input_shape), extendedLen(kernel), extendedLen(stride), extendedLen(dilation), extendedLen(padding))
-	if dim == -1:
+	input_shape, kernel, stride, dilation, padding, single = dimCheck(input_shape, kernel, stride, dilation, padding)
+	if single:
 		return (input_shape + 2*padding - dilation*(kernel - 1) - 1)//stride + 1
-	
-	input_shape = listify(input_shape, dim)
-	kernel = listify(kernel, dim)
-	stride = listify(stride, dim)
-	dilation = listify(dilation, dim)
-	padding = listify(padding, dim)
 	
 	return [calcShape(i, k, s, d, p) for i, k, s, d, p in zip(input_shape, kernel, stride, dilation, padding)]
 
 def autoStridePad(input_shape, output_shape, kernel, dilation=1):
-	dim = max(extendedLen(input_shape), extendedLen(output_shape), extendedLen(kernel), extendedLen(dilation))
-	if dim == -1:
-		return 0
-	
-	input_shape = listify(input_shape, dim)
-	output_shape = listify(output_shape, dim)
-	kernel = listify(kernel, dim)
-	dilation = listify(dilation, dim)
+	input_shape, output_shape, kernel, dilation, single = dimCheck(input_shape, output_shape, kernel, dilation)
+
+	if single:
+		if output_shape < calcShape(input_shape, kernel, kernel, dilation, 0):
+			raise ValueError("output shape is too small to be reached in one layer (without loosing inforamtion)")
+
+		if output_shape > calcShape(input_shape, kernel, 1, dilation, kernel//2):
+			raise ValueError("output shape is too big to be reached in one layer")
+
+		for stride in range(1, kernel + 1):
+			if calcShape(input_shape, kernel, stride, dilation, 0) <= output_shape:
+				break
+
+		padding = 0
+		while padding <= kernel//2:
+			if calcShape(input_shape, kernel, stride, dilation, padding) >= output_shape:
+				break
+
+			if padding == kernel//2:
+				stride -= 1
+				padding = 0
+
+			padding += 1
+
+		stride, padding = 1, 1
+		return stride, padding
 	
 	return [autoStridePad(i, o, k, d) for i, o, k, d in zip(input_shape, output_shape, kernel, dilation)]
 
@@ -91,6 +114,8 @@ functions to prepare a convolution
 """
 
 def convPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
+	kernel, stride, padding, _ = dimCheck(kernel, stride, padding)
+
 	in_dim = input.ndim
 	padded = pad(input, padding, padding_mode, padding_value)
 	strided = view(input, kernel, stride)
