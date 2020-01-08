@@ -64,6 +64,24 @@ ConvNdRec(func, kernel,  stride=1, padding=0, padding_mode='constant', padding_v
 
 Equivalent of `ConvNdRec` as a `torch.nn.Module` class.
 
+### convNdAuto
+
+```python
+convNdAuto(input, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args)
+```
+
+Equivalent of `convNdFunc` wich calculate `stride` and `padding` such that the output shaphe matches `output_shape`.
+
+__output\_shape__ : array-like or int, the desired output of the convolution.
+
+### ConvNdAuto
+
+```python
+ConvNdAuto(func, kernel, dilation=1, padding_mode='constant', padding_value=0)
+```
+
+Equivalent of `convNdAuto` as a `torch.nn.Module` class.
+
 # torchConvNd.Utils
 
 ### listify
