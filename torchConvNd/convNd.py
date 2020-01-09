@@ -1,5 +1,5 @@
 from .utils.utils import *
-from .convNdFunc import convNdFunc, ConvNdFunc, convTransposeNdFunc, ConvTransposeNdFunc
+from .convNdFunc import convNdFunc, ConvNdFunc
 
 from torch import nn
 import numpy as np
@@ -11,10 +11,9 @@ n-D convolutional layer
 def convNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0):
 	def func(x):
 		flat = x.flatten()
-		return nn.functional.linear(flat)
-		
+		return nn.functional.linear(flat, weight, bias)
 
-	return convNdFunc(x, func, kernel, stride, dilation, padding, padding_mode, padding_value)
+	return convNdFunc(x, func, kernel, stride, dilation, padding, 1, padding_mode, padding_value)
 
 class ConvNd(nn.Module):
 	def __init__(self, kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='constant', padding_value=0):
@@ -24,7 +23,7 @@ class ConvNd(nn.Module):
 			Flatten(),
 			nn.Linear(np.prod(kernel), 1, bias))
 
-		conv = ConvNdFunc(model, kernel, stride, dilation, padding, padding_mode, padding_value)
+		conv = ConvNdFunc(model, kernel, stride, dilation, padding, 1, padding_mode, padding_value)
 		self.forward = conv.forward
 		self.parameters = conv.parameters
 
@@ -39,7 +38,7 @@ def convTransposeNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=Non
 		result = nn.functional.linear(flat)
 		return result.reshape(*kernel)
 
-	return convTransposeNdFunc(x, func, kernel, stride, dilation, padding, padding_mode, padding_value)
+	return convNdFunc(x, func, kernel, 1, dilation, padding, stride, padding_mode, padding_value)
 
 class ConvTransposeNd(nn.Module):
 	def __init__(self, kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='constant', padding_value=0):
@@ -49,6 +48,6 @@ class ConvTransposeNd(nn.Module):
 			Flatten(),
 			nn.Linear(np.prod(kernel), 1, bias))
 
-		conv = ConvTransposeNdFunc(model, kernel, stride, dilation, padding, padding_mode, padding_value)
+		conv = ConvNdFunc(model, kernel, 1, dilation, padding, stride, padding_mode, padding_value)
 		self.forward = conv.forward
 		self.parameters = conv.parameters
