@@ -7,18 +7,33 @@ import numpy as np
 n-D convolution with arbitrary function
 """
 
-def convNdFunc(input, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0, *args):
-	in_dim = input.ndim
-
-	pereped, shape = convPrep(input, kernel, stride, padding, padding_mode, padding_value)
-	result = func(pereped, *args)
-
-	if result.ndim == in_dim:
-		return result
-	return convPost(result, shape)
+def convNdFunc(x, func, kernel, stride=1, dilation=1, padding=0, padding_mode='constant', padding_value=0, *args):
+    padded = pad(x, padding, padding_mode, padding_value)
+    strided = view(padded, kernel, stride, dilation)
+    inter, batch_shape = strided.flatten(0, x.ndim - 1), strided.shape[:x.ndim]
+    result = func(inter, *args)
+    
+    return result.reshape(*batch_shape)
 
 class ConvNdFunc(nn.Module):
-	def __init__(self, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
+	def __init__(self, func, kernel, stride=1, dilation=1, padding=0, padding_mode='constant', padding_value=0):
 		super(ConvNdFunc, self).__init__()
 		self.parameters = func.parameters
-		self.forward = lambda input, *args: convNdFunc(input, func, kernel, stride, padding, padding_mode, padding_value, *args)
+		self.forward = lambda x, *args: convNdFunc(x, func, kernel, stride, dilation, padding, padding_mode, padding_value, *args)
+
+"""
+n-D transposed convolution with arbitrary function
+"""
+
+def convTransposeNdFunc(x, func, kernel, stride=1, dilation=1, padding=0, padding_mode='constant', padding_value=0, *args):
+	filled = x.clone()
+	for dim, s in enumerate(listify(stride, x.ndim)):
+		filled = filled.repeat_interleave(s, dim)
+
+	return convNdFunc(filled, func, kernel, 1, dilation)
+
+class ConvTransposeNdFunc(nn.Module):
+	def __init__(self, func, kernel, stride=1, dilation=1, padding=0, padding_mode='constant', padding_value=0):
+		super(ConvTransposeNdFunc, self).__init__()
+		self.parameters = func.parameters
+		self.forward = lambda x, *args: convTransposeNdFunc(x, func, kernel, stride, dilation, padding, padding_mode, padding_value, *args)

@@ -1,4 +1,4 @@
-A library to compute N-D convolution in pytorch, using `Linear` filter, arbitrary `nn.Module` filter, and to automaticly calculate convolution parameters on the fly to obtain a desired output shape.
+A library to compute N-D convolutions and transposed convolutions in pytorch, using `Linear` filter, arbitrary `nn.Module` filter.
 
 # Instalation
 
@@ -32,6 +32,20 @@ ConvNd(kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='consta
 
 Equivalent of [`convNd`](#convNd) as a `torch.nn.Module` class.
 
+###convTransposeNd
+```python
+convTransposeNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
+```
+
+Transposed convolution (using [`repeat_intereleave`](https://pytorch.org/docs/stable/torch.html#torch.repeat_interleave)).
+
+###ConvTransposeNd
+```python
+ConvTransposeNd(kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
+```
+
+Equivalent of [`convTransposeNd`](#convTransposeNd) as a `torch.nn.Module` class.
+
 ### convNdFunc
 ```python
 convNdFunc(input, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0, *args)
@@ -48,21 +62,19 @@ ConvNdFunc(func, kernel, stride=1, padding=0, padding_mode='constant', padding_v
 
 Equivalent of [`ConvNdFunc`](#ConvNdFunc) as a `torch.nn.Module` class.
 
-### convNdAuto
+###convTransposeNdFunc
 ```python
-convNdAuto(input, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args)
+convNdFunc(x, func, kernel, stride=1, dilation=1, padding=0, padding_mode='constant', padding_value=0, *args)
 ```
 
-Equivalent of [`convNdFunc`](#convNdFunc) wich calculate `stride` and `padding` such that the output shaphe matches `output_shape`.
+Transposed convolution (using [`repeat_intereleave`](https://pytorch.org/docs/stable/torch.html#torch.repeat_interleave)).
 
-__output\_shape__ : array-like or int, the desired output of the convolution.
-
-### ConvNdAuto
+###ConvTransposeNdFunc
 ```python
-ConvNdAuto(func, kernel, dilation=1, padding_mode='constant', padding_value=0)
+ConvNdFunc(func, kernel, stride=1, dilation=1, padding=0, padding_mode='constant', padding_value=0)
 ```
 
-Equivalent of [`convNdAuto`](#convNdAuto) as a `torch.nn.Module` class.
+Equivalent of [`convTransposeNdFunc`](#convTransposeNdFunc) as a `torch.nn.Module` class.
 
 # torchConvNd.Utils
 
@@ -72,45 +84,6 @@ listify(x, dims=1)
 ```
 
 Transform `x` to an iterable if it is not.
-
-### sequencify
-```python
-sequencify(x, nlist=1, dims=1)
-```
-
-Transform `x` to an iterable of shape `(nlist, dims)` if it is not already an iterable of iterable.
-
-### extendedLen
-```python
-extendedLen(x)
-```
-
-Output the length of `x` if it is iterable, else `-1`.
-
-### dimCheck
-```python
-dimCheck(*args)
-```
-
-Check if all input are of same length or non-iterable, then [`listify`](#listify) them to their common length.
-
-### calcPadding
-```python
-calcPadding(kernel, stride)
-```
-### calcShape
-```python
-calcShape(input_shape, kernel, stride=1, dilation=1, padding=0):
-```
-
-Calculate the output shape of a convolution, see [torch.nn.Conv1d](https://pytorch.org/docs/stable/nn.html#torch.nn.Conv1d).
-
-### autoStridePad
-```python
-autoStridePad(input_shape, output_shape, kernel, dilation=1)
-```
-
-Calculate stride and padding size such that the output shape of a convolution matches `output_shape`.
 
 ### pad
 ```python
@@ -141,31 +114,6 @@ View(kernel, stride=1)
 ```
 
 Return the function `lambda input: view(input, kernel, stride)`.
-
-### convPrep
-```python
-convPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
-```
-
-Add padding of parameters `padding`, `padding_mode` and `padding_value` before generating a view of parameters `kernel` and `stride`.
-
-__kernel__, __stride__, __padding__: see [`convNd`](#convNd).
-
-__padding\_mode__,  __padding\_value__: see [`pad`](#pad).
-
-### ConvPrep
-```python
-ConvPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
-```
-
-Return an equivalent to function `lambda input: convPrep(input, kernel, stride, padding, padding_mode, padding_value)`.
-
-### convPost(input, shape)
-```python
-convPost(input, shape)
-```
-
-Reassemble the output of a convolution as a single tensor.
 
 ### Flatten
 ```python

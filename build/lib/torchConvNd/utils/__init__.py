@@ -1,1 +1,1 @@
-from .utils import listify, sequencify, extendedLen, dimCheck, calcShape, autoStridePad, AutoStridePad, pad, Pad, view, View, convPrep, ConvPrep, convPost, Flatten, Reshape
+from .utils import listify, pad, Pad, view, View, Flatten, Reshape

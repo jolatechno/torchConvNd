@@ -22,84 +22,14 @@ def listify(x, dims=1):
 
 	return [x for i in range(dims)]
 
-def sequencify(x, nlist=1, dims=1):
-	if nlist < 0:
-		return x
-	if isinstance(x, Iterable) and not isinstance(x, str):
-
-		if len(x) != nlist:
-			ValueError("Wrong sequence length")
-
-		if isinstance(x[0], Iterable) and not isinstance(x[0], str):
-
-			if len(x[0]) != dims:
-				ValueError("Shape don't match up")
-
-			return x
-		return [x for i in range(nlist)]
-	return [[x for i in range(dims)] for i in range(nlist)]
-
-def extendedLen(x):
-	if isinstance(x, Iterable):
-		return len(x)
-	return -1
-
-def dimCheck(*args):
-    dim = max([extendedLen(x)for x in args])
-    return (*[listify(x, dim) for x in args], dim == -1)
-
-"""
-functions for convNdAuto
-"""
-
-def calcShape(input_shape, kernel, stride=1, dilation=1, padding=0):
-	input_shape, kernel, stride, dilation, padding, single = dimCheck(input_shape, kernel, stride, dilation, padding)
-	if single:
-		return ((input_shape + 2*padding - dilation*(kernel - 1) - 1)//stride + 1)*dilation
-	
-	return [calcShape(i, k, s, d, p) for i, k, s, d, p in zip(input_shape, kernel, stride, dilation, padding)]
-
-def autoStridePad(input_shape, output_shape, kernel, dilation=1):
-	input_shape, output_shape, kernel, dilation, single = dimCheck(input_shape, output_shape, kernel, dilation)
-
-	if single:
-		if output_shape < calcShape(input_shape, kernel, kernel, dilation, 0):
-			raise ValueError("output shape is too small to be reached in one layer (without loosing inforamtion)")
-
-		if output_shape > calcShape(input_shape, kernel, 1, dilation, kernel//2):
-			raise ValueError("output shape is too big to be reached in one layer")
-
-		for stride in range(1, kernel + 1):
-			if calcShape(input_shape, kernel, stride, dilation, 0) <= output_shape:
-				break
-
-		padding = 0
-		while padding <= kernel//2:
-			if calcShape(input_shape, kernel, stride, dilation, padding) >= output_shape:
-				break
-
-			if padding == kernel//2:
-				stride -= 1
-				padding = 0
-
-			padding += 1
-
-		return stride, padding
-	
-	params = [autoStridePad(i, o, k, d) for i, o, k, d in zip(input_shape, output_shape, kernel, dilation)]
-	return [p[0] for p in params], [p[1] for p in params]
-
-def AutoStridePad(kernel, dilation=1):
-	return lambda input_shape, output_shape: autoStridePad(input_shape, output_shape, kernel, dilation)
-
 """
 padding functions
 """
 
-def pad(input, padding, mode='constant', value=0):
-	padding = listify(padding, input.ndim)
-	padding = np.repeat(padding[::-1], 2)	
-	return F.pad(input=input, pad=tuple(padding), mode=mode, value=value)
+def pad(x, padding, padding_mode='constant', padding_value=0):
+    padding = listify(padding, x.ndim)
+    padding = np.repeat(padding[::-1], 2)
+    return F.pad(input=x, pad=tuple(padding), mode=padding_mode, value=padding_value)
 
 def Pad(padding, mode='constant', value=0):
 	return lambda input: pad(input, padding, mode, value)
@@ -108,56 +38,19 @@ def Pad(padding, mode='constant', value=0):
 slicing functions
 """
 
-def view(input, kernel, stride=1):
-    strided, kernel, stride = input, listify(kernel, input.ndim), listify(stride, input.ndim)
-    
-    for dim, (k, s) in enumerate(zip(kernel, stride)):
-    	strided = strided.unfold(dim, k, s)
-
+def view(x, kernel, stride=1, dilation=1):
+    strided, ndim = x.clone(), x.ndim
+    kernel, stride, dilation= [listify(p, ndim) for p in [kernel, stride, dilation]]
+    for dim, (k, s, d) in enumerate(zip(kernel, stride, dilation)):
+        strided = strided.unfold(dim, k*d, s)
+        if d != 1:
+            idx = torch.LongTensor(range(k*d)[::d])
+            strided = torch.index_select(strided, -1, idx)
+            
     return strided
 
 def View(kernel, stride=1):
 	return lambda input: view(input, kernel, stride)
-
-"""
-functions to prepare a convolution
-"""
-
-def convPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
-	kernel, stride, padding, _ = dimCheck(kernel, stride, padding)
-
-	in_dim = input.ndim
-	padded = pad(input, padding, padding_mode, padding_value)
-	strided = view(input, kernel, stride)
-
-	shape = strided.shape[:in_dim]
-	return strided.flatten(0, in_dim - 1), shape
-
-def ConvPrep(input, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0):
-	Fpad = Pad(padding, padding_mode, padding_value)
-	Fstride = View(kernel, stride)
-	
-	return lambda input: Fstride(Fpad(input))
-
-"""
-functions to postprocess a convolution result
-"""
-
-letters = 'abcdefghijklmnopqrstuvwxyz'
-
-def convPost(input, shape):
-	input = input.reshape(*shape, *input.shape[1:])
-
-	dim = input.ndim//2
-	command = letters[:2*dim] + " -> "
-	for i in range(dim):
-	    command = command + letters[i] + letters[i + dim]
-
-	out = torch.einsum(command, input)
-	for i in reversed(range(dim)):
-	    out = out.flatten(2*i, 2*i + 1)
-
-	return out
 
 """
 custom layers

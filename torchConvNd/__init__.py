@@ -1,3 +1,2 @@
-from .convNdFunc import convNdFunc, ConvNdFunc
-from .convNdAuto import convNdAuto, ConvNdAuto
-from .convNd import convNd, ConvNd
+from .convNdFunc import convNdFunc, ConvNdFunc, convTransposeNdFunc, ConvTransposeNdFunc
+from .convNd import convNd, ConvNd, convTransposeNd, ConvTransposeNd
