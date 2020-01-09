@@ -1,25 +1,44 @@
 from .utils.utils import *
-from .convNdFunc import convNdFunc, ConvNdFunc
-
-from torch import nn
+from .convNdFunc import convNdFunc
 
 """
-n-D convolutional layer with automatic output shape
+n-D convolutional network with automatic output shape
 """
 
-def convNdAuto(input, output_shape, func, kernel, dilation=1, padding_mode='constant', padding_value=0, *args):
-	stride, padding = autoStridePad(list(input.shape), output_shape, kernel, dilation)
-	output_shape = listify(output_shape, input.ndim)
-
-	out = convNdFunc(input, func, kernel, stride, padding, padding_mode, padding_value, *args)
-
-	for i in range(input.ndim):
-		out = out.narrow(i, 0, output_shape[i])
-
+def convNdAutoFunc(x, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
+	out = x.clone()
+	for shape in shapes:
+		stride, dilation, padding, stride_transpose = autoShape(list(out.shape), kernel, shape, max_dilation, max_stride_transpose)
+		out = convNdFunc(out, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value)
+		for dim, s in enumerate(listify(shape, x.ndim)):
+			if out.shape[dim] != s:
+				out = out.narrow(dim, 0, s)
 	return out
 
-class ConvNdAuto(nn.Module):
-	def __init__(self, func, kernel, dilation=1, padding_mode='constant', padding_value=0):
-		super(ConvNdAuto, self).__init__()
+class ConvNdAutoFunc(nn.Module):
+	def __init__(self, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
+		super(ConvNdAutoFunc, self).__init__()
 		self.parameters = func.parameters
-		self.forward = lambda input, output_shape, *args: convNdAuto(input, output_shape, func, kernel, dilation, padding_mode, padding_value, *args)
+		self.forward = lambda x, shapes, *args: convNdAutoFunc(x, shapes, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose)
+
+"""
+n-D convolutional network with automatic output shape and linear filter
+"""
+
+def convNdAuto(x, weight, shapes, kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
+	def func(x):
+		flat = x.flatten()
+		return nn.functional.linear(flat, weight, bias)
+
+	return convNdAutoFunc(x, shapes, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose)
+
+class ConvNdAuto(nn.Module):
+	def __init__(self, kernel, bias=False, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
+		super(ConvNdAuto, self).__init__()
+		model = nn.Sequential(
+			Flatten(),
+			nn.Linear(np.prod(kernel), 1, bias))
+
+		conv = ConvNdAutoFunc(model, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose)
+		self.parameters = conv.parameters
+		self.forward = conv.forward
