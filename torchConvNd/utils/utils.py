@@ -37,6 +37,8 @@ def convShape(input_shape, kernel, stride=1, dilation=1, padding=0, stride_trans
 			listify(stride_transpose, dim))]
 		return shape
 
+	if stride > dilation*kernel:
+		return -1
 	return (input_shape*stride_transpose + 2*padding - dilation*kernel - 1)//stride + 1
 
 def autoShape(input_shape, kernel, output_shape, max_dilation=3, max_stride_transpose=4):
@@ -45,16 +47,17 @@ def autoShape(input_shape, kernel, output_shape, max_dilation=3, max_stride_tran
 		shape = [autoShape(i, k, o, max_dilation, max_stride_transpose) for i, k, o in zip(input_shape,
 			listify(kernel, dim),
 			listify(output_shape, dim))]
-		stride_transpose, padding, dilation, stride = np.transpose(shape)
+
+		stride, stride_transpose, dilation, padding, = np.transpose(shape)
 		stride, dilation, stride_transpose = stride + 1, dilation + 1, stride_transpose + 1
 		return stride.tolist(), dilation.tolist(), padding.tolist(), stride_transpose.tolist()
 
 	predictions = np.array([[[[convShape(input_shape, kernel, s, d, p, t)
-		for s in range(1, kernel*d + 1)] + [-1]*((max_dilation - d)*kernel)
-		for d in range(1, max_dilation + 1)]
 		for p in range(kernel//2 + 1)]
-		for t in range(1, max_stride_transpose + 1)])
-
+		for d in range(1, max_dilation + 1)]
+		for t in range(1, max_stride_transpose + 1)]
+		for s in range(1, kernel*max_dilation + 1)])
+	
 	cost = predictions - output_shape
 	cost[cost < 0] = np.amax(cost) + 1
 	return list(np.unravel_index(np.argmin(cost), cost.shape))
