@@ -31,7 +31,6 @@ def convNdRec(x, hidden, shapes, func, kernel, padding_mode='constant', padding_
 		out = result.reshape(*batch_shape)
 		for dim, s in enumerate(listify(shape, x.ndim)):
 			if out.shape[dim] != s:
-				print(out.shape[dim], s)
 				out = out.narrow(dim, 0, s)
 
 	return out, hidden
