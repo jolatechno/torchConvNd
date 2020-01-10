@@ -66,7 +66,7 @@ Equivalent of [`ConvNdFunc`](#ConvNdFunc) as a `torch.nn.Module` class.
 
 ### convNdAutoFunc
 ```python
-convNdAutoFunc(x, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4)
+convNdAutoFunc(x, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, *args)
 ```
 
 Uses [`autoShape`](#autoShape) to match `shape` at each convolution, with `shape` a target shape inside `shapes`.
@@ -91,6 +91,20 @@ convNdAuto(kernel, bias=None, padding_mode='constant', padding_value=0, max_dila
 ```
 
 Equivalent of [`convNdAuto`](#convNdAuto) as a `torch.nn.Module` class.
+
+### convNdRec
+```python
+convNdRec(x, hidden, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, *args)
+```
+
+Recursive version of [`convNdAutoFunc`](#convNdAutoFunc).
+
+### ConvNdRec
+```python
+ConvNdRec(func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4)
+```
+
+Equivalent of [`convNdRec`](#convNdRec) as a `torch.nn.Module` class.
 
 # torchConvNd.Utils
 

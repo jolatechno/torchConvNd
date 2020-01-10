@@ -5,11 +5,11 @@ from .convNdFunc import convNdFunc
 n-D convolutional network with automatic output shape
 """
 
-def convNdAutoFunc(x, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
+def convNdAutoFunc(x, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, *args):
 	out = x.clone()
 	for shape in shapes:
 		stride, dilation, padding, stride_transpose = autoShape(list(out.shape), kernel, shape, max_dilation, max_stride_transpose)
-		out = convNdFunc(out, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value)
+		out = convNdFunc(out, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
 		for dim, s in enumerate(listify(shape, x.ndim)):
 			if out.shape[dim] != s:
 				out = out.narrow(dim, 0, s)
@@ -19,7 +19,7 @@ class ConvNdAutoFunc(nn.Module):
 	def __init__(self, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
 		super(ConvNdAutoFunc, self).__init__()
 		self.parameters = func.parameters
-		self.forward = lambda x, shapes, *args: convNdAutoFunc(x, shapes, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose)
+		self.forward = lambda x, shapes, *args: convNdAutoFunc(x, shapes, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose, *args)
 
 """
 n-D convolutional network with automatic output shape and linear filter
