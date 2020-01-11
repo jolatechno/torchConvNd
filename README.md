@@ -32,14 +32,14 @@ ConvNd(kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='consta
 
 Equivalent of [`convNd`](#convNd) as a `torch.nn.Module` class.
 
-###convTransposeNd
+### convTransposeNd
 ```python
 convTransposeNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
 ```
 
 Transposed convolution (using [`repeat_intereleave`](https://pytorch.org/docs/stable/torch.html#torch.repeat_interleave)).
 
-###ConvTransposeNd
+### ConvTransposeNd
 ```python
 ConvTransposeNd(kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
 ```
