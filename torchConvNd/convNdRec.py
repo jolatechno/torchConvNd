@@ -39,7 +39,7 @@ def convNdAutoRec(x, hidden, shape, func, kernel, padding_mode='constant', paddi
 	return out
 
 class ConvNdAutoRec(nn.Module):
-	def __init__(self, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clipe=False):
+	def __init__(self, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False):
 		super(ConvNdAutoRec, self).__init__()
 		self.parameters = func.parameters
 		self.forward = lambda x, hidden, shapes, *arg: convNdAutoRec(x, hidden, shape, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose, Clip, *args)
