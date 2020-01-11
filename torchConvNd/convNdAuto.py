@@ -5,7 +5,7 @@ from .convNdFunc import convNdFunc
 n-D convolutional network with automatic output shape
 """
 
-def convNdAutoFunc(x, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, clip=False, *args):
+def convNdAutoFunc(x, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, clip=False, *args):
 	stride, dilation, padding, stride_transpose = autoShape(list(out.shape), kernel, shape, max_dilation, max_stride_transpose)
 	out = convNdFunc(x, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
 	
