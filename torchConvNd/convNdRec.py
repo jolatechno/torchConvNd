@@ -1,11 +1,11 @@
 from .utils.utils import *
-from .convNdAutoFunc import convNdAutoFunc
+from .convNdAutoFunc import convNdFunc
 
 """
-n-D convolutional network with automatic output shape
+n-D recurent convolutional network
 """
 
-def convNdRec(x, hidden, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, *args):
+def convNdRec(x, hidden, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args):
 	class Func:
 		idx = 0
 		def __call__(self, x, *args):
@@ -18,11 +18,28 @@ def convNdRec(x, hidden, shape, func, kernel, padding_mode='constant', padding_v
 			idx += length
 			return out
 	
-	result = convNdAutoFunc(x, shape, Func, kernel, padding_mode=, padding_value, max_dilation, max_stride_transpose, clip, *args):
+	result = convNdFunc(x, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
 	return result, hidden
 
 class ConvNdRec(nn.Module):
 	def __init__(self, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
 		super(ConvNdRec, self).__init__()
 		self.parameters = func.parameters
-		self.forward = lambda x, hidden, shapes, *arg: convNdRec(x, hidden, shape, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose, *args)
+		self.forward = lambda x, hidden, shapes, *arg: convNdRec(x, hidden, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
+
+"""
+n-D recurent convolutional network with automatic output shape
+"""
+
+def convNdAutoRec(x, hidden, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False, *args):
+	stride, dilation, padding, stride_transpose = autoShape(list(out.shape), kernel, shape, max_dilation, max_stride_transpose)
+	out = convNdRec(x, hidden, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
+	if Clip:
+		return clip(out, shape):
+	return out
+
+class ConvNdAutoRec(nn.Module):
+	def __init__(self, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
+		super(ConvNdAutoRec, self).__init__()
+		self.parameters = func.parameters
+		self.forward = lambda x, hidden, shapes, *arg: convNdAutoRec(x, hidden, shape, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose, *args)
