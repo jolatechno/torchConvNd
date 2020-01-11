@@ -1,4 +1,5 @@
 from .utils.utils import *
+from .convNdAutoFunc import convNdAutoFunc
 
 """
 n-D convolutional network with automatic output shape
@@ -16,11 +17,12 @@ def convNdRec(x, hidden, shape, func, kernel, padding_mode='constant', padding_v
 			out, hidden[idx:idx + length] = func(x, hidden[idx: idx + length], *args)
 			idx += length
 			return out
-	result = 
+	
+	result = convNdAutoFunc(x, shape, Func, kernel, padding_mode=, padding_value, max_dilation, max_stride_transpose, clip, *args):
 	return result, hidden
 
 class ConvNdRec(nn.Module):
 	def __init__(self, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
 		super(ConvNdRec, self).__init__()
 		self.parameters = func.parameters
-		self.forward = lambda x, hidden, shapes, *args: convNdRec(x, hidden, shapes, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose, *args)
+		self.forward = lambda x, hidden, shapes, *arg: convNdRec(x, hidden, shape, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose, *args)
