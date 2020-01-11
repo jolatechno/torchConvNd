@@ -63,6 +63,16 @@ def autoShape(input_shape, kernel, output_shape, max_dilation=3, max_stride_tran
 	return list(np.unravel_index(np.argmin(cost), cost.shape))
 
 """
+clipping function
+"""
+
+def clip(x, shape):
+	for dim, (s, t) in enumerate(zip(x.shape, listify(shape, x.ndim))):
+		if t != s:
+			x = x.narrow(dim, (t - s)//2, s)
+	return x
+
+"""
 padding functions
 """
 
