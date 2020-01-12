@@ -40,14 +40,14 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Equivalent of [`convNd`](#convNd) as a `torch.nn.Module` class.
         
-        ###convTransposeNd
+        ### convTransposeNd
         ```python
         convTransposeNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
         ```
         
         Transposed convolution (using [`repeat_intereleave`](https://pytorch.org/docs/stable/torch.html#torch.repeat_interleave)).
         
-        ###ConvTransposeNd
+        ### ConvTransposeNd
         ```python
         ConvTransposeNd(kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
         ```
@@ -74,45 +74,59 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         ### convNdAutoFunc
         ```python
-        convNdAutoFunc(x, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, *args)
+        convNdAutoFunc(x, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False, *args)
         ```
         
         Uses [`autoShape`](#autoShape) to match `shape` at each convolution, with `shape` a target shape inside `shapes`.
         
         ### ConvNdAutoFunc
         ```python
-        ConvNdAutoFunc(func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4)
+        ConvNdAutoFunc(func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False)
         ```
         
         Equivalent of [`convNdAutoFunc`](#convNdAutoFunc) as a `torch.nn.Module` class.
         
         ### convNdAuto
         ```python
-        convNdAuto(x, weight, shapes, kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4)
+        convNdAuto(x, weight, shapes, kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False)
         ```
         
         Equivalent of [`convNdAutoFunc`](#convNdAutoFunc) using a linear filter.
         
         ### ConvNdAuto
         ```python
-        convNdAuto(kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4)
+        convNdAuto(kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False)
         ```
         
         Equivalent of [`convNdAuto`](#convNdAuto) as a `torch.nn.Module` class.
         
         ### convNdRec
         ```python
+        convNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
+        ```
+        
+        Recursive version of [`convNdFunc`](#convNdFunc).
+        
+        ### ConvNdRec
+        ```python
+        ConvNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
+        ```
+        
+        Equivalent of [`convNdRec`](#convNdRec) as a `torch.nn.Module` class.
+        
+        ### convNdAutoRec
+        ```python
         convNdRec(x, hidden, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, *args)
         ```
         
         Recursive version of [`convNdAutoFunc`](#convNdAutoFunc).
         
-        ### ConvNdRec
+        ### ConvNdAutoRec
         ```python
-        ConvNdRec(func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4)
+        ConvNdAutoRec(func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4)
         ```
         
-        Equivalent of [`convNdRec`](#convNdRec) as a `torch.nn.Module` class.
+        Equivalent of [`convNdAutoRec`](#convNdAutoRec) as a `torch.nn.Module` class.
         
         # torchConvNd.Utils
         
@@ -136,6 +150,13 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         ```
         
         Compute the optimal parameters `stride`, `dilation`, `padding` and `stride_transpose` given `input_shape`, `kernel` to match `output_shape`.
+        
+        ### clip
+        ```python
+        clip(x, shape)
+        ```
+        
+        Take a slice of `x` of size `shape` (in the center).
         
         ### pad
         ```python

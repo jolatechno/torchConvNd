@@ -6,10 +6,10 @@ n-D convolutional network with automatic output shape
 """
 
 def convNdAutoFunc(x, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False, *args):
-	stride, dilation, padding, stride_transpose = autoShape(list(out.shape), kernel, shape, max_dilation, max_stride_transpose)
+	stride, dilation, padding, stride_transpose = autoShape(list(x.shape), kernel, shape, max_dilation, max_stride_transpose)
 	out = convNdFunc(x, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
 	if Clip:
-		return clip(out, shape):
+		return clip(out, shape)
 	return out
 
 class ConvNdAutoFunc(nn.Module):
