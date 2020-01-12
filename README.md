@@ -6,7 +6,7 @@ Use `pip3 install torchConvNd`
 
 # Documentation
 
-### convNd
+## convNd
 ```python
 convNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
 ```
@@ -27,7 +27,7 @@ __bias__ : `None` or `torch.tensor` of size `(dilation[0]*dilation[1]*...dilatio
 
 __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 
-### ConvNd
+## ConvNd
 ```python
 ConvNd(kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='constant', padding_value=0)
 ```
@@ -38,7 +38,7 @@ __bias__ : boolean, controls the usage or not of biases.
 
 __kernel__, __stride__, __dilation__, __padding__, __padding\_mode__,  __padding\_value__: Same as in [`convNd`](#convNd).
 
-### convTransposeNd
+## convTransposeNd
 ```python
 convTransposeNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
 ```
@@ -61,7 +61,7 @@ __bias__ : `None` or `torch.tensor` of size `(dilation[0]*dilation[1]*...dilatio
 
 __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 
-### ConvTransposeNd
+## ConvTransposeNd
 ```python
 ConvTransposeNd(kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
 ```
@@ -73,7 +73,7 @@ __bias__ : boolean, controls the usage or not of biases.
 __kernel__, __stride__, __dilation__, __padding__, __padding\_mode__,  __padding\_value__: Same as in [`convTransposeNd`](#convTransposeNd).
 
 
-### convNdFunc
+## convNdFunc
 ```python
 convNdFunc(x, func, kernel, stride=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args)
 ```
@@ -96,7 +96,7 @@ __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 
 __*args__: additional arguments to pass to `func`.
 
-### ConvNdFunc
+## ConvNdFunc
 ```python
 ConvNdFunc(func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
 ```
@@ -105,7 +105,7 @@ Equivalent of [`ConvNdFunc`](#ConvNdFunc) as a `torch.nn.Module` class.
 
 __func__, __kernel__, __stride__, __dilation__, __padding__, __stride\_transpose__, __padding\_mode__, __padding\_value__ : Same as in [`convNdFunc`](#convNdFunc).
 
-### convNdAutoFunc
+## convNdAutoFunc
 ```python
 convNdAutoFunc(x, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False, *args)
 ```
@@ -130,7 +130,7 @@ __Clip__ : boolean, if true clips the output to exactly match `shape`.
 
 __*args__: additional arguments to pass to `func`.
 
-### ConvNdAutoFunc
+## ConvNdAutoFunc
 ```python
 ConvNdAutoFunc(func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False)
 ```
@@ -140,7 +140,7 @@ Equivalent of [`convNdAutoFunc`](#convNdAutoFunc) as a `torch.nn.Module` class.
 __func__, __kernel__, __padding\_mode__, __padding\_value__, __max\_dilation__, __max\_stride\_transpose__, __Clip__ : Same as in [`convNdAutoFunc`](#convNdAutoFunc).
 
 
-### convNdAuto
+## convNdAuto
 ```python
 convNdAuto(x, weight, shapes, kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False)
 ```
@@ -167,7 +167,7 @@ __Clip__ : boolean, if true clips the output to exactly match `shape`.
 
 __*args__: additional arguments to pass to `func`.
 
-### ConvNdAuto
+## ConvNdAuto
 ```python
 ConvNdAuto(kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False)
 ```
@@ -178,7 +178,7 @@ __bias__ : boolean, controls the usage or not of biases.
 
 __kernel__, __padding\_mode__, __padding\_value__, __max\_dilation__, __max\_stride\_transpose__, __Clip__ : Same as in [`convNdAuto`](#convNdAuto).
 
-### convNdRec
+## convNdRec
 ```python
 convNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
 ```
@@ -205,7 +205,7 @@ __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 
 __*args__: additional arguments to pass to `func`.
 
-### ConvNdRec
+## ConvNdRec
 ```python
 ConvNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
 ```
