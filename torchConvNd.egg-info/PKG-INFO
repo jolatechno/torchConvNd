@@ -16,10 +16,12 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         ### convNd
         ```python
-        convNd(input, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
+        convNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
         ```
         
-        __Weight :__ `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims], kernel[0]*kernel[1]*...kernel[n_dims])`.
+        __x__ : `torch.tensor` of dimesnion `n_dims + 1`.
+        
+        __Weight__ : `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims], kernel[0]*kernel[1]*...kernel[n_dims])`.
         
         __kernel__ : array-like or int, kernel size of the  convolution.
         
@@ -40,6 +42,10 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Equivalent of [`convNd`](#convNd) as a `torch.nn.Module` class.
         
+        __bias__ : Boolean.
+        
+        __kernel__, __stride__, __dilation__, __padding__, __padding\_mode__,  __padding\_value__: Same as in [`convNd`](#convNd).
+        
         ### convTransposeNd
         ```python
         convTransposeNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
@@ -54,16 +60,28 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Equivalent of [`convTransposeNd`](#convTransposeNd) as a `torch.nn.Module` class.
         
+        __x__, __Weight__, __kernel__, __stride__, __dilation__, __padding__, __bias__, __padding\_mode__,  __padding\_value__: Same as in [`convTransposeNd`](#convTransposeNd).
+        
         ### convNdFunc
         ```python
-        convNdFunc(input, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0, *args)
+        convNdFunc(x, func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0, *args)
         ```
         
-        __kernel__, __stride__, __dilation__, __padding__: see [`convNd`](#convNd).
+        __x__ : `torch.tensor` of dimesnion `n_dims + 1`.
+        
+        __Weight__ : `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims], kernel[0]*kernel[1]*...kernel[n_dims])`.
+        
+        __kernel__ : array-like or int, kernel size of the  convolution.
+        
+        __stride__ : array-like or int, stride length of the convolution.
+        
+        __dilation__ : array-like or int, dilation of the convolution.
+        
+        __padding__ : `None`, array-like or int, padding size.
+        
+        __bias__ : `None` or `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims])`.
         
         __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
-        
-        __stride\_transpose__ : equivalent of `stride` for [`convTransposeNd`](#convTransposeNd).
         
         ### ConvNdFunc
         ```python

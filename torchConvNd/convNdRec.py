@@ -35,7 +35,7 @@ def convNdAutoRec(x, hidden, shape, func, kernel, padding_mode='constant', paddi
 	stride, dilation, padding, stride_transpose = autoShape(list(x.shape), kernel, shape, max_dilation, max_stride_transpose)
 	out = convNdRec(x, hidden, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
 	if Clip:
-		return clip(out, shape)
+		return clip(out, [-1] + listify(shape, x.ndim - 1))
 	return out
 
 class ConvNdAutoRec(nn.Module):

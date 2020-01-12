@@ -9,8 +9,14 @@ n-D convolution (or transpose convolution if we use stride_transpose instead of 
 
 def convNdFunc(x, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
 	filled = x.clone()
-	for dim, s in enumerate(listify(stride_transpose, x.ndim)):
-		filled = filled.repeat_interleave(s, dim)
+
+	kernel = [-1] + listify(kernel, x.ndim - 1)
+	stride = [1] + listify(stride, x.ndim - 1)
+	dilation = [1] + listify(dilation, x.ndim - 1)
+	padding = [0] + listify(padding, x.ndim - 1)
+
+	for dim, s in enumerate(listify(stride_transpose, x.ndim - 1)):
+		filled = filled.repeat_interleave(s, dim + 1)
 
 	padded = pad(filled, padding, padding_mode, padding_value)
 	strided = view(padded, kernel, stride, dilation)
