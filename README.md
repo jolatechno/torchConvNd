@@ -214,7 +214,7 @@ Equivalent of [`convNdRec`](#convNdRec) as a `torch.nn.Module` class.
 
 __func__, __kernel__, __stride__, __dilation__, __padding__, __stride\_transpose__, __padding\_mode__, __padding\_value__ : Same as in [`convNdRec`](#convNdRec).
 
-### convNdAutoRec
+## convNdAutoRec
 ```python
 convNdAutoRec(x, hidden, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, *args)
 ```
@@ -241,7 +241,7 @@ __Clip__ : boolean, if true clips the output to exactly match `shape`.
 
 __*args__: additional arguments to pass to `func`.
 
-### ConvNdAutoRec
+## ConvNdAutoRec
 ```python
 ConvNdAutoRec(func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4)
 ```
@@ -252,7 +252,7 @@ __func__, __kernel__, __padding\_mode__, __padding\_value__, __max\_dilation__, 
 
 # torchConvNd.Utils
 
-### listify
+## listify
 ```python
 listify(x, dims=1)
 ```
@@ -263,14 +263,14 @@ __x__ : array like or non iterable object (or string), object to listify.
 
 __dims__ : int, array size to obtain.
 
-### convShape
+## convShape
 ```python
 convShape(input_shape, kernel, stride=1, dilation=1, padding=0, stride_transpose=1)
 ```
 
 Compute the ouput shape of a convolution of parameters `kernel`, `stride`, `dilation`, `padding` and `stride_transpose` given an input of shape `input_shape`.
 
-### autoShape
+## autoShape
 ```python
 autoShape(input_shape, kernel, output_shape, max_dilation=3, max_stride_transpose=4)
 ```
@@ -287,7 +287,7 @@ __max\_dilation__ : array-like or int, maximum value of dialtion.
 
 __max\_stride\_transpose__ : array-like or int, maximum value of stride_transpose.
 
-### clip
+## clip
 ```python
 clip(x, shape)
 ```
@@ -298,7 +298,7 @@ __x__ :  `torch.tensor`, tensor to clip.
 
 __shape__ : array-like or int, shape to obtain.
 
-### Clip
+## Clip
 ```python
 Clip(shape)
 ```
@@ -307,7 +307,7 @@ Equivalent of [`clip`](#clip) which returns a function.
 
 __shape__ : same as in [`clip`](#clip).
 
-### pad
+## pad
 ```python
 pad(x, padding, padding_mode='constant', padding_value=0)
 ```
@@ -322,7 +322,7 @@ __padding\_mode__ : 'constant', 'reflect', 'replicate' or 'circular', see [torch
 
 __padding\_value__ : float, value to pad with if `padding_mode` id 'constant'.
 
-### Pad
+## Pad
 ```python
 Pad(padding, padding_mode='constant', padding_value=0)
 ```
@@ -331,7 +331,7 @@ Equivalent of [`pad`](#pad) which returns a function.
 
 __padding__, __padding\_mode__, __padding\_value__ : same as with [`pad`](#pad)
 
-### view
+## view
 ```python
 view(x, kernel, stride=1)
 ```
@@ -344,7 +344,7 @@ __kernel__ : array-like or int, kernel size of the convolution.
 
 __stride__ : array-like or int, stride length of the convolution.
 
-### View
+## View
 ```python
 View(kernel, stride=1)
 ```
@@ -353,14 +353,14 @@ Equivalent of [`view`](#view) which returns a function.
 
 __kernel__, __stride__ : same as in [`view`](#view).
 
-### Flatten
+## Flatten
 ```python
 Flatten()
 ```
 
 A `torch.nn.Module` class that takes a tensor of shape `(N, i, j, k...)` and reshape it to `(N, i*j*k*...)`.
 
-### Reshape
+## Reshape
 ```python
 Reshape(shape)
 ```
