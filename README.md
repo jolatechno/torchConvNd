@@ -268,7 +268,19 @@ __dims__ : int, array size to obtain.
 convShape(input_shape, kernel, stride=1, dilation=1, padding=0, stride_transpose=1)
 ```
 
-Compute the ouput shape of a convolution of parameters `kernel`, `stride`, `dilation`, `padding` and `stride_transpose` given an input of shape `input_shape`.
+Compute the ouput shape of a convolution.
+
+__input\_shape__ : array-like or int, shape of the input tensor.
+
+__kernel__ : array-like or int, kernel size of the convolution.
+
+__stride__ : array-like or int, stride length of the convolution.
+
+__dilation__ : array-like or int, dilation of the convolution.
+
+__padding__ : `None`, array-like or int, padding size.
+
+__stride\_transpose__ : array-like or int, equivalent to `stride` in [`convTransposeNd`](#convTransposeNd).
 
 ## autoShape
 ```python

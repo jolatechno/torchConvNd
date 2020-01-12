@@ -9,7 +9,7 @@ def parse_requirements(filename):
 
 setup(
     name="torchConvNd",
-    version="0.1.2",
+    version="0.1.3",
     author="Joseph TOUZET",
     author_email="joseph.touzet@gmail.com",
     description="a library to create convolution from any torch network",
