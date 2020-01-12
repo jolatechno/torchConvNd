@@ -101,7 +101,7 @@ __*args__: additional arguments to pass to `func`.
 ConvNdFunc(func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
 ```
 
-Equivalent of [`ConvNdFunc`](#ConvNdFunc) as a `torch.nn.Module` class.
+Equivalent of [`convNdFunc`](#convNdFunc) as a `torch.nn.Module` class.
 
 __func__, __kernel__, __stride__, __dilation__, __padding__, __stride\_transpose__, __padding\_mode__, __padding\_value__ : Same as in [`convNdFunc`](#convNdFunc).
 
