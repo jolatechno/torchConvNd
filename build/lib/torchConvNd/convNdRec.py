@@ -1,42 +1,45 @@
 from .utils.utils import *
+from .convNdFunc import convNdFunc 
 
 """
-n-D convolutional network with automatic output shape
+n-D recurent convolutional network
 """
 
-def convNdRec(x, hidden, shapes, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, *args):
-	out, hidden_out = x.clone(), np.zeros(0)
-	idx = 0
-	for shape in shapes:
-		stride, dilation, padding, stride_transpose = autoShape(list(out.shape), kernel, shape, max_dilation, max_stride_transpose)
-
-		filled = x.clone()
-		for dim, s in enumerate(listify(stride_transpose, x.ndim)):
-			filled = filled.repeat_interleave(s, dim)
-
-		padded = pad(filled, padding, padding_mode, padding_value)
-		strided = view(padded, kernel, stride, dilation)
-		inter, batch_shape = strided.flatten(0, x.ndim - 1), strided.shape[:x.ndim]
-
-		batch_size = inter.shape[0]
-
-		if idx + batch_size > hidden.shape[0]:
-			dif = idx + batch_size - hidden.shape[0]
-			hidden = torch.cat((hidden, torch.zeros(dif, *hidden.shape[1:])), 0)
-
-		result, hidden[idx:idx + batch_size] = func(inter.unsqueeze(1), hidden.narrow(0, idx, batch_size), *args)
-
-		idx += batch_size
-
-		out = result.reshape(*batch_shape)
-		for dim, s in enumerate(listify(shape, x.ndim)):
-			if out.shape[dim] != s:
-				out = out.narrow(dim, 0, s)
-		
-	return out, hidden
+def convNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
+	idx, hiddens = [0], [hidden] # Has to be a list to be modified inside of Func
+	def Func(x, *args):
+		length = x.shape[0]
+		dif = idx[0] + length - hiddens[0].shape[0]
+		if dif > 0:
+			fill = torch.zeros(dif, *hiddens[0].shape[1:])
+			hiddens[0] = torch.cat((hiddens[0], fill), 0)
+			
+		out, hiddens[0][idx[0]:idx[0] + length] = func(x, hiddens[0][idx[0]: idx[0] + length], *args)
+		idx[0] += length
+		return out
+	
+	result = convNdFunc(x, Func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
+	return result, hiddens[0]
 
 class ConvNdRec(nn.Module):
-	def __init__(self, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4):
+	def __init__(self, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0):
 		super(ConvNdRec, self).__init__()
 		self.parameters = func.parameters
-		self.forward = lambda x, hidden, shapes, *args: convNdRec(x, hidden, shapes, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose, *args)
+		self.forward = lambda x, hidden, shape, *args: convNdRec(x, hidden, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
+
+"""
+n-D recurent convolutional network with automatic output shape
+"""
+
+def convNdAutoRec(x, hidden, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False, *args):
+	stride, dilation, padding, stride_transpose = autoShape(list(x.shape), kernel, shape, max_dilation, max_stride_transpose)
+	out = convNdRec(x, hidden, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
+	if Clip:
+		return clip(out, [-1] + listify(shape, x.ndim - 1))
+	return out
+
+class ConvNdAutoRec(nn.Module):
+	def __init__(self, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False):
+		super(ConvNdAutoRec, self).__init__()
+		self.parameters = func.parameters
+		self.forward = lambda x, hidden, shape, *args: convNdAutoRec(x, hidden, shape, func, kernel, padding_mode, padding_value, max_dilation, max_stride_transpose, Clip, *args)
