@@ -1,12 +1,12 @@
 Metadata-Version: 2.1
 Name: torchConvNd
-Version: 0.1.3
+Version: 0.1.4
 Summary: a library to create convolution from any torch network
 Home-page: https://github.com/jolatechno/torchConvNd
 Author: Joseph TOUZET
 Author-email: joseph.touzet@gmail.com
 License: UNKNOWN
-Description: A library to compute N-D convolutions and transposed convolutions in pytorch, using `Linear` filter, arbitrary `nn.Module` filter.
+Description: A library to compute N-D convolutions, transposed convolutions, recursive convolution in pytorch, using `Linear` filter, arbitrary `nn.Module` filter. It also gives the option of automaticly finding convolution parameters to match a desired output shape.
         
         # Instalation
         
@@ -18,6 +18,10 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         ```python
         convNd(x, weight, kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
         ```
+        
+        N-Dimensional convolution.
+        
+        #### _Inputs_ :
         
         __x__ : `torch.tensor` of shape `(batch_size, *shape)`.
         
@@ -35,12 +39,18 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
         
+        #### _Outputs_ :
+        
+        __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`.
+        
         ## ConvNd
         ```python
         ConvNd(kernel, stride=1, dilation=1, padding=0, bias=False, padding_mode='constant', padding_value=0)
         ```
         
         Equivalent of [`convNd`](#convNd) as a `torch.nn.Module` class.
+        
+        #### _Inputs_ :
         
         __bias__ : boolean, controls the usage or not of biases.
         
@@ -52,6 +62,8 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         ```
         
         Transposed convolution (using [`repeat_intereleave`](https://pytorch.org/docs/stable/torch.html#torch.repeat_interleave)).
+        
+        #### _Inputs_ :
         
         __x__ : `torch.tensor` of shape `(batch_size, *shape)`.
         
@@ -69,12 +81,18 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
         
+        #### _Outputs_ :
+        
+        __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`.
+        
         ## ConvTransposeNd
         ```python
         ConvTransposeNd(kernel, stride=1, dilation=1, padding=0, bias=None, padding_mode='constant', padding_value=0)
         ```
         
         Equivalent of [`convTransposeNd`](#convTransposeNd) as a `torch.nn.Module` class.
+        
+        #### _Inputs_ :
         
         __bias__ : boolean, controls the usage or not of biases.
         
@@ -85,6 +103,10 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         ```python
         convNdFunc(x, func, kernel, stride=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args)
         ```
+        
+        Equivalent of [`convNd`](#convNd) using an arbitrary filter `func`.
+        
+        #### _Inputs_ :
         
         __x__ : `torch.tensor` of shape `(batch_size, *shape)`.
         
@@ -104,12 +126,18 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         __*args__: additional arguments to pass to `func`.
         
+        #### _Outputs_ :
+        
+        __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`.
+        
         ## ConvNdFunc
         ```python
         ConvNdFunc(func, kernel, stride=1, padding=0, padding_mode='constant', padding_value=0)
         ```
         
         Equivalent of [`convNdFunc`](#convNdFunc) as a `torch.nn.Module` class.
+        
+        #### _Inputs_ :
         
         __func__, __kernel__, __stride__, __dilation__, __padding__, __stride\_transpose__, __padding\_mode__, __padding\_value__ : Same as in [`convNdFunc`](#convNdFunc).
         
@@ -119,6 +147,8 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         ```
         
         Uses [`autoShape`](#autoShape) to match `shape` at each convolution, with `shape` a target shape inside `shapes`.
+        
+        #### _Inputs_ :
         
         __x__ : `torch.tensor` of shape `(batch_size, *shape)`.
         
@@ -137,6 +167,10 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         __Clip__ : boolean, if true clips the output to exactly match `shape`.
         
         __*args__: additional arguments to pass to `func`.
+        
+        #### _Outputs_ :
+        
+        __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`, `shape_out` is strictly bigger than `shape` (equal if `Clip` is set to `True`).
         
         ## ConvNdAutoFunc
         ```python
@@ -155,6 +189,8 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Equivalent of [`convNdAutoFunc`](#convNdAutoFunc) using a linear filter.
         
+        #### _Inputs_ :
+        
         __x__ : `torch.tensor` of shape `(batch_size, *shape)`.
         
         __Weight__ : `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims], kernel[0]*kernel[1]*...kernel[n_dims])`.
@@ -175,12 +211,18 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         __*args__: additional arguments to pass to `func`.
         
+        #### _Outputs_ :
+        
+        __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`, `shape_out` is strictly bigger than `shape` (equal if `Clip` is set to `True`).
+        
         ## ConvNdAuto
         ```python
         ConvNdAuto(kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4, Clip=False)
         ```
         
         Equivalent of [`convNdAuto`](#convNdAuto) as a `torch.nn.Module` class.
+        
+        #### _Inputs_ :
         
         __bias__ : boolean, controls the usage or not of biases.
         
@@ -193,11 +235,13 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Recursive version of [`convNdFunc`](#convNdFunc).
         
-        __x__ : `torch.tensor` of shape `(batch_size, *shape)`.
+        #### _Inputs_ :
+        
+        __x__ : `torch.tensor` of shape `(batch_size, seq, *shape)`.
         
         __hidden__ : `torch.tensor` of shape `(length, *hidden_shape)` (if `length` < `batch_size` the tensor will be elongated with zeros).
         
-        __func__ : function, taking two `torch.tensor` of shape `(batch_size, *kernel)` and `(batch_size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size,)` and `(batch_size, *hidden_shape)`.
+        __func__ : function, taking two `torch.tensor` of shape `(batch_size, seq, *kernel)` and `(batch_size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size, seq)` and `(batch_size, *hidden_shape)`.
         
         __kernel__ : array-like or int, kernel size of the  convolution.
         
@@ -213,12 +257,20 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         __*args__: additional arguments to pass to `func`.
         
+        #### _Outputs_ :
+        
+        __out__ : `torch.tensor` of shape `(batch_size, seq, *shape_out)`.
+        
+        __hidden__ : `torch.tensor` of shape `(batch_size, *hidden_shape)`.
+        
         ## ConvNdRec
         ```python
         ConvNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
         ```
         
         Equivalent of [`convNdRec`](#convNdRec) as a `torch.nn.Module` class.
+        
+        #### _Inputs_ :
         
         __func__, __kernel__, __stride__, __dilation__, __padding__, __stride\_transpose__, __padding\_mode__, __padding\_value__ : Same as in [`convNdRec`](#convNdRec).
         
@@ -229,13 +281,15 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Recursive version of [`convNdAutoFunc`](#convNdAutoFunc).
         
-        __x__ : `torch.tensor` of shape `(batch_size, *shape)`.
+        #### _Inputs_ :
+        
+        __x__ : `torch.tensor` of shape `(batch_size, seq, *shape)`.
         
         __hidden__ : `torch.tensor` of shape `(length, *hidden_shape)` (if `length` < `batch_size` the tensor will be elongated with zeros).
         
         __shape__ : array-like or int, target shape of the convolution.
         
-        __func__ : function, taking two `torch.tensor` of shape `(batch_size, *kernel)` and `(batch_size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size,)` and `(batch_size, *hidden_shape)`.
+        __func__ : function, taking two `torch.tensor` of shape `(batch_size, seq, *kernel)` and `(batch_size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size, seq)` and `(batch_size, *hidden_shape)`.
         
         __kernel__ : array-like or int, kernel size of the  convolution.
         
@@ -249,12 +303,20 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         __*args__: additional arguments to pass to `func`.
         
+        #### _Outputs_ :
+        
+        __out__ : `torch.tensor` of shape `(batch_size, seq, *shape_out)`, `shape_out` is strictly bigger than `shape` (equal if `Clip` is set to `True`).
+        
+        __hidden__ : `torch.tensor` of shape `(batch_size, *hidden_shape)`.
+        
         ## ConvNdAutoRec
         ```python
         ConvNdAutoRec(func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, max_stride_transpose=4)
         ```
         
         Equivalent of [`convNdAutoRec`](#convNdAutoRec) as a `torch.nn.Module` class.
+        
+        #### _Inputs_ :
         
         __func__, __kernel__, __padding\_mode__, __padding\_value__, __max\_dilation__, __max\_stride\_transpose__, __Clip__ : Same as in [`convNdAutoRec`](#convNdAutoRec).
         
@@ -267,9 +329,15 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Transform `x` to an iterable if it is not.
         
+        #### _Inputs_ :
+        
         __x__ : array like or non iterable object (or string), object to listify.
         
         __dims__ : int, array size to obtain.
+        
+        #### _Outputs_ :
+        
+        __out__ :  array like, listified version of x.
         
         ## convShape
         ```python
@@ -277,6 +345,8 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         ```
         
         Compute the ouput shape of a convolution.
+        
+        #### _Inputs_ :
         
         __input\_shape__ : array-like or int, shape of the input tensor.
         
@@ -290,12 +360,18 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         __stride\_transpose__ : array-like or int, equivalent to `stride` in [`convTransposeNd`](#convTransposeNd).
         
+        #### _Outputs_ :
+        
+        __shape__ : array-like or int, predicted output shape of the convolution.
+        
         ## autoShape
         ```python
         autoShape(input_shape, kernel, output_shape, max_dilation=3, max_stride_transpose=4)
         ```
         
         Compute the optimal parameters `stride`, `dilation`, `padding` and `stride_transpose` to match `output_shape`.
+        
+        #### _Inputs_ :
         
         __input\_shape__ : array-like or int, shape of the input tensor.
         
@@ -307,6 +383,14 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         __max\_stride\_transpose__ : array-like or int, maximum value of stride_transpose.
         
+        #### _Outputs_ :
+        
+        __dilation__ : array-like or int, dilation of the convolution.
+        
+        __padding__ : array-like or int, padding size.
+        
+        __stride\_transpose__ : array-like or int, equivalent to `stride` in [`convTransposeNd`](#convTransposeNd).
+        
         ## clip
         ```python
         clip(x, shape)
@@ -314,9 +398,15 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Take a slice of `x` of size `shape` (in the center).
         
-        __x__ :  `torch.tensor`, tensor to clip.
+        #### _Inputs_ :
+        
+        __x__ :  `torch.tensor`, input tensor.
         
         __shape__ : array-like or int, shape to obtain.
+        
+        #### _Outputs_ :
+        
+        __out__ :  `torch.tensor`, clipped tensor.
         
         ## Clip
         ```python
@@ -324,6 +414,8 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         ```
         
         Equivalent of [`clip`](#clip) which returns a function.
+        
+        #### _Inputs_ :
         
         __shape__ : same as in [`clip`](#clip).
         
@@ -334,7 +426,9 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Based on [torch.nn.functional.pad](https://pytorch.org/docs/stable/nn.functional.html#pad).
         
-        __x__ :  `torch.tensor`, tensor to clip.
+        #### _Inputs_ :
+        
+        __x__ :  `torch.tensor`, input tensor.
         
         __padding__ : array-like or int, size of the padding (identical on each size).
         
@@ -342,12 +436,18 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         __padding\_value__ : float, value to pad with if `padding_mode` id 'constant'.
         
+        #### _Outputs_ :
+        
+        __out__ :  `torch.tensor`, paded tensor.
+        
         ## Pad
         ```python
         Pad(padding, padding_mode='constant', padding_value=0)
         ```
         
         Equivalent of [`pad`](#pad) which returns a function.
+        
+        #### _Inputs_ :
         
         __padding__, __padding\_mode__, __padding\_value__ : same as with [`pad`](#pad)
         
@@ -358,11 +458,17 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         
         Generate a view (for a convolution) with parameters `kernel` and `stride`.
         
-        __x__ :  `torch.tensor`, tensor to clip.
+        #### _Inputs_ :
+        
+        __x__ :  `torch.tensor`, input tensor.
         
         __kernel__ : array-like or int, kernel size of the convolution.
         
         __stride__ : array-like or int, stride length of the convolution.
+        
+        #### *Outputs* :
+        
+        __out__ :  `torch.tensor`, strided tensor.
         
         ## View
         ```python
@@ -370,6 +476,8 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         ```
         
         Equivalent of [`view`](#view) which returns a function.
+        
+        #### _Inputs_ :
         
         __kernel__, __stride__ : same as in [`view`](#view).
         
@@ -386,6 +494,8 @@ Description: A library to compute N-D convolutions and transposed convolutions i
         ```
         
         A `torch.nn.Module` class that takes a tensor of shape `(N, i)` and reshape it to `(N, *shape)`.
+        
+        #### _Inputs_ :
         
         __shape__ : array-like or int, shape to obtain.
 Platform: UNKNOWN
