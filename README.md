@@ -27,7 +27,7 @@ __bias__ : `None` or `torch.tensor` of size `(dilation[0]*dilation[1]*...dilatio
 
 __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 
-### outputs
+#### Outputs :
 
 __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`.
 
@@ -65,7 +65,7 @@ __bias__ : `None` or `torch.tensor` of size `(dilation[0]*dilation[1]*...dilatio
 
 __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 
-### outputs
+#### Outputs :
 
 __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`.
 
@@ -104,7 +104,7 @@ __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 
 __*args__: additional arguments to pass to `func`.
 
-### outputs
+#### Outputs :
 
 __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`.
 
@@ -142,7 +142,7 @@ __Clip__ : boolean, if true clips the output to exactly match `shape`.
 
 __*args__: additional arguments to pass to `func`.
 
-### outputs
+#### Outputs :
 
 __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`, `shape_out` is strictly bigger than `shape` (equal if `Clip` is set to `True`).
 
@@ -183,7 +183,7 @@ __Clip__ : boolean, if true clips the output to exactly match `shape`.
 
 __*args__: additional arguments to pass to `func`.
 
-### outputs
+#### Outputs :
 
 __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`, `shape_out` is strictly bigger than `shape` (equal if `Clip` is set to `True`).
 
@@ -225,7 +225,7 @@ __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
 
 __*args__: additional arguments to pass to `func`.
 
-### outputs
+#### Outputs :
 
 __out__ : `torch.tensor` of shape `(batch_size, seq, *shape_out)`.
 
@@ -267,7 +267,7 @@ __Clip__ : boolean, if true clips the output to exactly match `shape`.
 
 __*args__: additional arguments to pass to `func`.
 
-### outputs
+#### Outputs :
 
 __out__ : `torch.tensor` of shape `(batch_size, seq, *shape_out)`, `shape_out` is strictly bigger than `shape` (equal if `Clip` is set to `True`).
 
@@ -295,7 +295,7 @@ __x__ : array like or non iterable object (or string), object to listify.
 
 __dims__ : int, array size to obtain.
 
-### outputs
+#### Outputs :
 
 __out__ :  array like, listified version of x.
 
@@ -318,7 +318,7 @@ __padding__ : `None`, array-like or int, padding size.
 
 __stride\_transpose__ : array-like or int, equivalent to `stride` in [`convTransposeNd`](#convTransposeNd).
 
-### outputs
+#### Outputs :
 
 __shape__ : array-like or int, predicted output shape of the convolution.
 
@@ -339,7 +339,7 @@ __max\_dilation__ : array-like or int, maximum value of dialtion.
 
 __max\_stride\_transpose__ : array-like or int, maximum value of stride_transpose.
 
-### outputs
+#### Outputs :
 
 __dilation__ : array-like or int, dilation of the convolution.
 
@@ -358,7 +358,7 @@ __x__ :  `torch.tensor`, input tensor.
 
 __shape__ : array-like or int, shape to obtain.
 
-### outputs
+#### Outputs :
 
 __out__ :  `torch.tensor`, clipped tensor.
 
@@ -386,7 +386,7 @@ __padding\_mode__ : 'constant', 'reflect', 'replicate' or 'circular', see [torch
 
 __padding\_value__ : float, value to pad with if `padding_mode` id 'constant'.
 
-### outputs
+#### Outputs :
 
 __out__ :  `torch.tensor`, paded tensor.
 
@@ -412,7 +412,7 @@ __kernel__ : array-like or int, kernel size of the convolution.
 
 __stride__ : array-like or int, stride length of the convolution.
 
-### outputs
+#### Outputs :
 
 __out__ :  `torch.tensor`, strided tensor.
 
