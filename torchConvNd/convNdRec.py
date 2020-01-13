@@ -6,7 +6,7 @@ n-D recurent convolutional network
 """
 
 def convNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
-	batch_length, seq, hidden_shape = x.shape[:2], hidden.shape[1:]
+	batch_length, seq, hidden_shape = *x.shape[:2], hidden.shape[1:]
 	x = x.permute(1, 0, *range(2, x.ndim)).flatten(0, 1)
 	idx, hiddens = [0], [hidden] # Has to be a list to be modified inside of Func
 
