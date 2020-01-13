@@ -49,7 +49,6 @@ def autoShape(input_shape, kernel, output_shape, max_dilation=3, max_stride_tran
 			listify(output_shape, dim))]
 
 		stride, stride_transpose, dilation, padding, = np.transpose(shape)
-		stride, dilation, stride_transpose = stride + 1, dilation + 1, stride_transpose + 1
 		return stride.tolist(), dilation.tolist(), padding.tolist(), stride_transpose.tolist()
 
 	predictions = np.array([[[[convShape(input_shape, kernel, s, d, p, t)
@@ -60,7 +59,8 @@ def autoShape(input_shape, kernel, output_shape, max_dilation=3, max_stride_tran
 	
 	cost = predictions - output_shape
 	cost[cost < 0] = np.amax(cost) + 1
-	return list(np.unravel_index(np.argmin(cost), cost.shape))
+	s, t, d, p = list(np.unravel_index(np.argmin(cost), cost.shape))
+	return s + 1, t + 1, d + 1, p
 
 """
 clipping function
