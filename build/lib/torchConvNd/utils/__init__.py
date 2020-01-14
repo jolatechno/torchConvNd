@@ -1,1 +1,1 @@
-from .utils import listify, convShape, autoShape, clip, pad, Pad, view, View, Flatten, Reshape
+from .utils import listify, convShape, autoShape, pad, Pad, view, View, Flatten, Reshape, Clip
