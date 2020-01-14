@@ -24,7 +24,8 @@ def convNdFunc(x, func, kernel, stride=1, dilation=1, padding=0, stride_transpos
 	result = func(inter, *args)
 
 	if isinstance(result, tuple):
-		return (result[0].reshape(*batch_shape),) + result[1:]
+		result, additional = result[0], result[1:]
+		return (result.reshape(*batch_shape),) + additional
 
 	return result.reshape(*batch_shape)
 

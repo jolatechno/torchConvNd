@@ -21,9 +21,10 @@ def convNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_t
 		out = out.permute(1, 0, *range(2, out.ndim)).flatten(0, 1)
 		return out, hidden
 	
-	result, hidden = convNdFunc(x, Func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, hidden, *args)
+	result = convNdFunc(x, Func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, hidden, *args)
+	result, hidden, additional = result[0], result[1], result[2:]
 	result = result.reshape(seq, batch_length, *result.shape[1:]).permute(1, 0, *range(2, result.ndim + 1))
-	return result, hidden
+	return (result, hidden) + additional
 
 class ConvNdRec(nn.Module):
 	def __init__(self, shape, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0):

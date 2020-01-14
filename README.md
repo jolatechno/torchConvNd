@@ -250,6 +250,8 @@ __out__ : `torch.tensor` of shape `(batch_size, seq, *shape_out)`.
 
 __hidden__ : `torch.tensor` of shape `(batch_size, *hidden_shape)`.
 
+__*(additional returns)__ : any additional returns of `func`.
+
 ## ConvNdRec
 ```python
 ConvNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
@@ -291,6 +293,8 @@ __*args__: additional arguments to pass to `func`.
 __out__ : `torch.tensor` of shape `(batch_size, seq, *shape_out)`, `shape_out` is strictly bigger than `shape`.
 
 __hidden__ : `torch.tensor` of shape `(batch_size, *hidden_shape)`.
+
+__*(additional returns)__ : any additional returns of `func`.
 
 ## ConvNdAutoRec
 ```python
