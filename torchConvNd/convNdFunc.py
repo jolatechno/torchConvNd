@@ -23,6 +23,9 @@ def convNdFunc(x, func, kernel, stride=1, dilation=1, padding=0, stride_transpos
 	inter, batch_shape = strided.flatten(0, x.ndim - 1), strided.shape[:x.ndim]
 	result = func(inter, *args)
 
+	if isinstance(result, tuple):
+		return (result[0].reshape(*batch_shape),) + result[1:]
+
 	return result.reshape(*batch_shape)
 
 class ConvNdFunc(nn.Module):
