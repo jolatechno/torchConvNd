@@ -146,9 +146,9 @@ Recursive version of [`convNdFunc`](#convNdFunc).
 
 __x__ : `torch.tensor` of shape `(batch_size, seq, *shape)`.
 
-__hidden__ : `torch.tensor` of shape `(length, *hidden_shape)` (if `length` < `batch_size` the tensor will be elongated with zeros).
+__hidden__ : `torch.tensor` of shape `(length, *hidden_shape)` (if `length` < `size` the tensor will be elongated with zeros).
 
-__func__ : function, taking two `torch.tensor` of shape `(batch_size, seq, *kernel)` and `(batch_size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size, seq)` and `(batch_size, *hidden_shape)`.
+__func__ : function, taking two `torch.tensor` of shape `(batch_size, seq, size, *kernel)` and `(batch_size, size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size, seq, size)` and `(batch_size, *hidden_shape)`.
 
 __kernel__ : array-like or int, kernel size of the  convolution.
 

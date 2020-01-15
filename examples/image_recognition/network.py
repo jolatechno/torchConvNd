@@ -17,15 +17,24 @@ class cell(nn.Module):
 		self.i2o = nn.Sequential(*[nn.Linear(In, Out, bias) for In, Out in zip(i2o_shape[:-1], i2o_shape[1:])])
 		self.i2h = nn.Sequential(*[nn.Linear(In, Out, bias) for In, Out in zip(i2h_shape[:-1], i2h_shape[1:])])
 
-	def forward(self, x, hidden, cost):
-		Out, In = [], x.flatten(2, -1)
-		n_repeat = x.shape[0]//cost.shape[0]
+	def forward(self, x, hidden, cost=None):
+		batch_length, seq = x.shape[:2]
+		if cost is None:
+			cost = torch.zeros(batch_length, seq)
+
+		Out, In = [], x.flatten(3, -1)
+		n_repeat = x.shape[2]
+
 		for i in range(x.shape[1]):
-			Slice, Cost = In[:, i, :], cost[:, i]
-			Cost = cost.repeat_interleave(n_repeat, 0)
-			inter = torch.cat((Slice, hidden, Cost), -1)
-			hidden = self.i2h(inter)
-			Out.append(self.i2o(inter).squeeze(-1).unsqueeze(1))
+			Slice = In[:, i, :, :].flatten(0, 1)
+			Hidden = hidden.flatten(0, 1)
+			Cost = cost[:, i].repeat_interleave(n_repeat, 0).unsqueeze(-1)
+
+			inter = torch.cat((Slice, Hidden, Cost), -1)
+
+			Out.append(self.i2o(inter).reshape(batch_length, 1, -1))
+			hidden = self.i2h(inter).reshape(*hidden.shape)
+
 		return torch.cat(Out, 1), hidden
 
 class network(nn.Module):
@@ -42,7 +51,7 @@ class network(nn.Module):
 
 		self.parameters = func.parameters
 
-	def forward(self, x, hidden, cost):
+	def forward(self, x, hidden, cost=None):
 		out = x.clone()
 		for i, layer in enumerate(self.layers[:-1]):
 			out, hidden[i] = layer(out, hidden[i], cost)
