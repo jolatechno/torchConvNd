@@ -21,7 +21,7 @@ class cell(nn.Module):
 		batch_length, seq = x.shape[:2]
 		if cost is None:
 			cost = torch.zeros(batch_length, seq)
-
+		
 		Out, In = [], x.flatten(3, -1)
 		n_repeat = x.shape[2]
 

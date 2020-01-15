@@ -3,6 +3,13 @@ import torch
 
 import numpy as np
 
+loss = torch.nn.MSELoss()
+
+def costFunc(out, target):
+	result = out.squeeze(0).squeeze(0)
+	return loss(target, result).unsqueeze(0).unsqueeze(0).float()
+
+
 def load_mnist(download=True):
 	data = datasets.MNIST('./data', download=download,
 		transform=transforms.Compose([
