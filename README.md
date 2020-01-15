@@ -148,7 +148,7 @@ __x__ : `torch.tensor` of shape `(batch_size, seq, *shape)`.
 
 __hidden__ : `torch.tensor` of shape `(batch_size, length, *hidden_shape)` (if `length` < `size` the tensor will be elongated with zeros).
 
-__func__ : function, taking two `torch.tensor` of shape `(batch_size, seq, size, *kernel)` and `(batch_size, size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size, seq, size)` and `(batch_size, *hidden_shape)`.
+__func__ : function, taking two `torch.tensor` of shape `(batch_size, seq, size, *kernel)` and `(batch_size, size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size, seq, size)` and `(batch_size, size, *hidden_shape)`.
 
 __kernel__ : array-like or int, kernel size of the  convolution.
 
