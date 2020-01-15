@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: torchConvNd
-Version: 0.1.7
+Version: 0.1.8
 Summary: a library to create convolution from any torch network
 Home-page: https://github.com/jolatechno/torchConvNd
 Author: Joseph TOUZET
@@ -154,7 +154,7 @@ Description: A library to compute N-D convolutions, transposed convolutions and 
         
         __x__ : `torch.tensor` of shape `(batch_size, seq, *shape)`.
         
-        __hidden__ : `torch.tensor` of shape `(length, *hidden_shape)` (if `length` < `size` the tensor will be elongated with zeros).
+        __hidden__ : `torch.tensor` of shape `(batch_size, length, *hidden_shape)` (if `length` < `size` the tensor will be elongated with zeros).
         
         __func__ : function, taking two `torch.tensor` of shape `(batch_size, seq, size, *kernel)` and `(batch_size, size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size, seq, size)` and `(batch_size, *hidden_shape)`.
         
