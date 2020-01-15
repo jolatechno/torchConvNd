@@ -1,12 +1,12 @@
 Metadata-Version: 2.1
 Name: torchConvNd
-Version: 0.1.5
+Version: 0.1.6
 Summary: a library to create convolution from any torch network
 Home-page: https://github.com/jolatechno/torchConvNd
 Author: Joseph TOUZET
 Author-email: joseph.touzet@gmail.com
 License: UNKNOWN
-Description: A library to compute N-D convolutions, transposed convolutions, recursive convolution in pytorch, using `Linear` filter, arbitrary `nn.Module` filter. It also gives the option of automaticly finding convolution parameters to match a desired output shape.
+Description: A library to compute N-D convolutions, transposed convolutions and recursive convolution in pytorch, using `Linear` filter or arbitrary functions as filter. It also gives the option of automaticly finding convolution parameters to match a desired output shape.
         
         # Instalation
         
@@ -143,86 +143,6 @@ Description: A library to compute N-D convolutions, transposed convolutions, rec
         
         __func__, __kernel__, __stride__, __dilation__, __padding__, __stride\_transpose__, __padding\_mode__, __padding\_value__ : Same as in [`convNdFunc`](#convNdFunc).
         
-        ## convNdAuto
-        ```python
-        convNdAuto(x, weight, shape, kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3)
-        ```
-        
-        Equivalent of [`convNdAutoFunc`](#convNdAutoFunc) using a linear filter.
-        
-        #### *Inputs* :
-        
-        __x__ : `torch.tensor` of shape `(batch_size, *shape)`.
-        
-        __Weight__ : `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims], kernel[0]*kernel[1]*...kernel[n_dims])`.
-        
-        __shape__ : array-like or int, target shape of the convolution.
-        
-        __kernel__ : array-like or int, kernel size of the  convolution.
-        
-        __bias__ : `None` or `torch.tensor` of size `(dilation[0]*dilation[1]*...dilation[n_dims])`.
-        
-        __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
-        
-        __max\_dilation__ : array-like or int, maximum value of dialtion.
-        
-        __*args__: additional arguments to pass to `func`.
-        
-        #### _Outputs_ :
-        
-        __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`, `shape_out` is strictly bigger than `shape`.
-        
-        ## ConvNdAuto
-        ```python
-        ConvNdAuto(shape, kernel, bias=None, padding_mode='constant', padding_value=0, max_dilation=3)
-        ```
-        
-        Equivalent of [`convNdAuto`](#convNdAuto) as a `torch.nn.Module` class.
-        
-        #### *Inputs* :
-        
-        __bias__ : boolean, controls the usage or not of biases.
-        
-        __shape__, __kernel__, __padding\_mode__, __padding\_value__, __max\_dilation__ : Same as in [`convNdAuto`](#convNdAuto).
-        
-        ## convNdAutoFunc
-        ```python
-        convNdAutoFunc(x, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, *args)
-        ```
-        
-        Uses [`autoShape`](#autoShape) to match the output shape to `shape`.
-        
-        #### *Inputs* :
-        
-        __x__ : `torch.tensor` of shape `(batch_size, *shape)`.
-        
-        __shape__ : array-like or int, target shape of the convolution.
-        
-        __func__ : function, taking a `torch.tensor` of shape `(batch_size, *kernel)` and outputs a `torch.tensor` of shape `(batch_size,)`.
-        
-        __kernel__ : array-like or int, kernel size of the  convolution.
-        
-        __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
-        
-        __max\_dilation__ : array-like or int, maximum value of dialtion.
-        
-        __*args__: additional arguments to pass to `func`.
-        
-        #### _Outputs_ :
-        
-        __out__ : `torch.tensor` of shape `(batch_size, *shape_out)`, `shape_out` is strictly bigger than `shape`.
-        
-        __*(additional returns)__ : any additional returns of `func`.
-        
-        ## ConvNdAutoFunc
-        ```python
-        ConvNdAutoFunc(shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3)
-        ```
-        
-        Equivalent of [`convNdAutoFunc`](#convNdAutoFunc) as a `torch.nn.Module` class.
-        
-        __shape__, __func__, __kernel__, __padding\_mode__, __padding\_value__, __max\_dilation__ : Same as in [`convNdAutoFunc`](#convNdAutoFunc).
-        
         ## convNdRec
         ```python
         convNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
@@ -270,50 +190,6 @@ Description: A library to compute N-D convolutions, transposed convolutions, rec
         #### *Inputs* :
         
         __func__, __kernel__, __stride__, __dilation__, __padding__, __stride\_transpose__, __padding\_mode__, __padding\_value__ : Same as in [`convNdRec`](#convNdRec).
-        
-        ## convNdAutoRec
-        ```python
-        convNdAutoRec(x, hidden, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, *args)
-        ```
-        
-        Recursive version of [`convNdAutoFunc`](#convNdAutoFunc).
-        
-        #### *Inputs* :
-        
-        __x__ : `torch.tensor` of shape `(batch_size, seq, *shape)`.
-        
-        __hidden__ : `torch.tensor` of shape `(length, *hidden_shape)` (if `length` < `batch_size` the tensor will be elongated with zeros).
-        
-        __shape__ : array-like or int, target shape of the convolution.
-        
-        __func__ : function, taking two `torch.tensor` of shape `(batch_size, seq, *kernel)` and `(batch_size, *hidden_shape)` and outputs two `torch.tensor` of shape `(batch_size, seq)` and `(batch_size, *hidden_shape)`.
-        
-        __kernel__ : array-like or int, kernel size of the  convolution.
-        
-        __padding\_mode__,  __padding\_value__: see [`pad`](#pad).
-        
-        __max\_dilation__ : array-like or int, maximum value of dialtion.
-        
-        __*args__: additional arguments to pass to `func`.
-        
-        #### _Outputs_ :
-        
-        __out__ : `torch.tensor` of shape `(batch_size, seq, *shape_out)`, `shape_out` is strictly bigger than `shape`.
-        
-        __hidden__ : `torch.tensor` of shape `(batch_size, *hidden_shape)`.
-        
-        __*(additional returns)__ : any additional returns of `func`.
-        
-        ## ConvNdAutoRec
-        ```python
-        ConvNdAutoRec(shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3)
-        ```
-        
-        Equivalent of [`convNdAutoRec`](#convNdAutoRec) as a `torch.nn.Module` class.
-        
-        #### *Inputs* :
-        
-        __shape__, __func__, __kernel__, __padding\_mode__, __padding\_value__, __max\_dilation__ : Same as in [`convNdAutoRec`](#convNdAutoRec).
         
         # torchConvNd.Utils
         
@@ -377,6 +253,10 @@ Description: A library to compute N-D convolutions, transposed convolutions, rec
         __max\_dilation__ : array-like or int, maximum value of dialtion.
         
         #### _Outputs_ :
+        
+        __kernel__ : array-like or int, `listified(kernel, len(input_shape))` if `input_shape` is a list, else `kernel`.
+        
+        __stride__ : array-like or int, stride length of the convolution.
         
         __dilation__ : array-like or int, dilation of the convolution.
         

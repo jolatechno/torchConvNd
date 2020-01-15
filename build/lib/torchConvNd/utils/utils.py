@@ -39,7 +39,7 @@ def convShape(input_shape, kernel, stride=1, dilation=1, padding=0, stride_trans
 
 	if stride > dilation*kernel or padding > dilation*kernel//2:
 		return -1
-	return (input_shape*stride_transpose + 2*padding - dilation*kernel - 1)//stride + 1
+	return (input_shape*stride_transpose + padding*2 - dilation*kernel)//stride + 1
 
 def autoShape(input_shape, kernel, output_shape, max_dilation=3):
 	if any([isinstance(p, Iterable) for p in [input_shape, kernel, output_shape]]):
@@ -48,19 +48,20 @@ def autoShape(input_shape, kernel, output_shape, max_dilation=3):
 			listify(kernel, dim),
 			listify(output_shape, dim))]
 
-		stride, stride_transpose, dilation, padding, = np.transpose(shape)
-		return stride.tolist(), dilation.tolist(), padding.tolist(), stride_transpose.tolist()
+		kernel, stride, dilation, padding, stride_transpose = np.transpose(shape)
+		return kernel.tolist(), stride.tolist(), dilation.tolist(), padding.tolist(), stride_transpose.tolist()
 
 	predictions = np.array([[[[convShape(input_shape, kernel, s, d, p, t)
 		for p in range(max_dilation*kernel//2 + 1)]
 		for d in range(1, max_dilation + 1)]
 		for t in range(1, kernel//2 + 1)]
 		for s in range(1, kernel*max_dilation + 1)])
-	
+
 	cost = predictions - output_shape
 	cost[cost < 0] = np.amax(cost) + 1
+
 	s, t, d, p = list(np.unravel_index(np.argmin(cost), cost.shape))
-	return s + 1, t + 1, d + 1, p
+	return kernel, s + 1, d + 1, p, t + 1
 
 """
 padding functions
@@ -84,6 +85,7 @@ def view(x, kernel, stride=1, dilation=1):
     for dim, (k, s, d) in enumerate(zip(kernel, stride, dilation)):
     	if k != -1:
     		strided = strided.unfold(dim, k*d, s)
+
     	if d != 1:
             idx = torch.LongTensor(range(k*d)[::d])
             strided = torch.index_select(strided, -1, idx)

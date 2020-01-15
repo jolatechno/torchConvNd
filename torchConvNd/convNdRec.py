@@ -27,22 +27,7 @@ def convNdRec(x, hidden, func, kernel, stride=1, dilation=1, padding=0, stride_t
 	return (result, hidden) + additional
 
 class ConvNdRec(nn.Module):
-	def __init__(self, shape, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0):
+	def __init__(self, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0):
 		super(ConvNdRec, self).__init__()
 		self.parameters = func.parameters
 		self.forward = lambda x, hidden, *args: convNdRec(x, hidden, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
-
-"""
-n-D recurent convolutional network with automatic output shape
-"""
-
-def convNdAutoRec(x, hidden, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3, *args):
-	stride, dilation, padding, stride_transpose = autoShape(list(x.shape)[2:], kernel, shape, max_dilation)
-	out, hidden = convNdRec(x, hidden, func, kernel, stride, dilation, padding, stride_transpose, padding_mode, padding_value, *args)
-	return out, hidden
-
-class ConvNdAutoRec(nn.Module):
-	def __init__(self, shape, func, kernel, padding_mode='constant', padding_value=0, max_dilation=3):
-		super(ConvNdAutoRec, self).__init__()
-		self.parameters = func.parameters
-		self.forward = lambda x, hidden, *args: convNdAutoRec(x, hidden, shape, func, kernel, padding_mode, padding_value, max_dilation, *args)

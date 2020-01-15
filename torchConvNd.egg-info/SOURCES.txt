@@ -2,7 +2,6 @@ README.md
 setup.py
 torchConvNd/__init__.py
 torchConvNd/convNd.py
-torchConvNd/convNdAuto.py
 torchConvNd/convNdFunc.py
 torchConvNd/convNdRec.py
 torchConvNd.egg-info/PKG-INFO
