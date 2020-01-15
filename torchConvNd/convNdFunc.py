@@ -9,7 +9,7 @@ n-D convolution (or transpose convolution if we use stride_transpose instead of 
 
 def convNdFunc(x, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
 	filled = x.clone()
-
+	
 	kernel = [-1] + listify(kernel, x.ndim - 1)
 	stride = [1] + listify(stride, x.ndim - 1)
 	dilation = [1] + listify(dilation, x.ndim - 1)

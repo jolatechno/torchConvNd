@@ -1,7 +1,32 @@
-from torchvision import datasets
+from torchvision import datasets, transforms
 import torch
 
-def load_mnist():
-	return datasets.MNIST('./data', train=True, transform=None, target_transform=None, download=True)
+import numpy as np
 
-mnist = load_mnist()
+def load_mnist(download=True):
+	data = datasets.MNIST('./data', download=download,
+		transform=transforms.Compose([
+			transforms.ToTensor(),
+			transforms.Normalize((0.1307,), (0.3081,))
+		]))
+    
+	X, Y = [x[0] for x in data], [x[1] for x in data]
+    
+	X = torch.cat([x for x in X], 0)
+	Y = torch.tensor(np.array([np.eye(10)[i] for i in Y]))
+
+	return X, Y
+
+def load_fashion_mnist(download=True):
+	data = datasets.FashionMNIST('./data', download=download,
+		transform=transforms.Compose([
+			transforms.ToTensor(),
+			transforms.Normalize((0.1307,), (0.3081,))
+		]))
+    
+	X, Y = [x[0] for x in data], [x[1] for x in data]
+    
+	X = torch.cat([x for x in X], 0)
+	Y = torch.tensor(np.array([np.eye(10)[i] for i in Y]))
+
+	return X, Y
