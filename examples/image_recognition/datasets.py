@@ -7,6 +7,9 @@ loss = torch.nn.MSELoss()
 
 def costFunc(out, target):
 	result = out.squeeze(0).squeeze(0)
+	Max = torch.max(abs(out))
+	if Max != 0:
+		result = result/Max
 	return loss(target, result).unsqueeze(0).unsqueeze(0).float()
 
 
