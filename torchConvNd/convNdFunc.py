@@ -10,25 +10,35 @@ n-D convolution (or transpose convolution if we use stride_transpose instead of 
 def convNdFunc(x, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0, *args):
 	filled = x.clone()
 	
-	kernel = [-1] + listify(kernel, x.ndim - 1)
-	stride = [1] + listify(stride, x.ndim - 1)
-	dilation = [1] + listify(dilation, x.ndim - 1)
-	padding = [0] + listify(padding, x.ndim - 1)
+	kernel = [-1, -1] + listify(kernel, x.ndim - 2)
+	stride = [1, 1] + listify(stride, x.ndim - 2)
+	dilation = [1, 1] + listify(dilation, x.ndim - 2)
+	padding = [0, 0] + listify(padding, x.ndim - 2)
+	stride_transpose = listify(stride_transpose, x.ndim - 2)
 
-	for dim, s in enumerate(listify(stride_transpose, x.ndim - 1)):
-		filled = filled.repeat_interleave(s, dim + 1)
-
+	for dim, s in enumerate(stride_transpose):
+		if s != 1:
+			filled = filled.repeat_interleave(s, dim + 2)
 
 	padded = pad(filled, padding, padding_mode, padding_value)
 	strided = view(padded, kernel, stride, dilation)
-	inter, batch_shape = strided.flatten(0, x.ndim - 1), strided.shape[:x.ndim]
-	result = func(inter, *args)
+
+	batch_length, batch_shape = strided.shape[0], strided.shape[2:x.ndim]
+
+	flattend = strided.flatten(2, x.ndim - 1)
+	permuted = flattend.permute(0, 2, 1, *range(3, x.ndim + 1))
+	flattend = permuted.flatten(0, 1)
+	result = func(flattend, *args)
 
 	if isinstance(result, tuple):
 		result, additional = result[0], result[1:]
-		return (result.reshape(*batch_shape),) + additional
+		reshaped = result.reshape(batch_length, *batch_shape, -1)
+		permuted = reshaped.permute(0, -1, *range(1, x.ndim - 1))
+		return (permuted,) + additional
 
-	return result.reshape(*batch_shape)
+	reshaped = result.reshape(batch_length, *batch_shape, -1)
+	permuted = reshaped.permute(0, -1, *range(1, x.ndim - 1))
+	return permuted
 
 class ConvNdFunc(nn.Module):
 	def __init__(self, func, kernel, stride=1, dilation=1, padding=0, stride_transpose=1, padding_mode='constant', padding_value=0):
